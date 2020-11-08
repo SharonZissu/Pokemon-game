@@ -29,7 +29,11 @@ function shuffle(a) {
 }
 
 const getGameForPlayer = (player) => {
-  return games.find((g) => g.players.find((p) => p.socket === player));
+  return games.find((g) => g.players.find((p) => p.socketId === player.id));
+};
+
+const getGameForPlayerBySocketId = (socketId) => {
+  return games.find((g) => g.players.find((p) => p.socketId === socketId));
 };
 
 exports.createBoard = () => {
@@ -64,20 +68,30 @@ exports.createBoard = () => {
 exports.getGames = () =>
   games.map((g) => {
     const { players, ...game } = g;
+    const newPlayers = players.map((p) => {
+      return {
+        socketId: p.id,
+        color: p.color,
+        name: p.name,
+      };
+    });
     return {
       ...game,
+      newPlayers,
       numberOfPlayers: players.length,
     };
   });
 
-exports.createGame = ({ player, name }) => {
+exports.createGame = ({ player, gameName, playerName }) => {
   const game = {
-    name,
+    gameName,
     turn: "red",
     players: [
       {
-        socket: player.id,
+        socket: player,
+        socketId: player.id,
         color: "red",
+        name: playerName,
       },
     ],
     chat: [],
@@ -91,10 +105,14 @@ exports.createGame = ({ player, name }) => {
 exports.endGame = ({ player, winner }) => {
   const game = getGameForPlayer(player);
   // players might disconnect while in the lobby
+  // console.log("PLAYERRR:", player);
   if (!game) return;
+  console.log("BEFOREEE SPLICEEE");
   games.splice(games.indexOf(game), 1);
   game.players.forEach((currentPlayer) => {
-    if (player !== currentPlayer.socket) currentPlayer.socket.emit("end-game");
+    if (player !== currentPlayer.socket) {
+      currentPlayer.socket.emit("end-game");
+    }
     if (winner) currentPlayer.socket.emit("winner", winner);
   });
 };
@@ -102,12 +120,14 @@ exports.endGame = ({ player, winner }) => {
 exports.getGameById = (gameId) =>
   exports.getGames().find((g) => g.id === gameId);
 
-exports.addPlayerToGame = ({ player, gameId }) => {
+exports.addPlayerToGame = ({ player, gameId, playerName }) => {
   const game = games.find((g) => g.id === gameId);
 
   game.players.push({
     color: "blue",
-    socket: player.id,
+    socket: player,
+    socketId: player.id,
+    name: playerName,
   });
 
   return "blue";
@@ -138,8 +158,8 @@ exports.checkIfStartGame = (gameId) => {
 exports.updateBoardForStart = (gameId) => {
   const game = games.find((g) => g.id === gameId);
 
-  const redPlayer = game.players[0].socket;
-  const bluePlayer = game.players[1].socket;
+  const redPlayer = game.players[0].socketId;
+  const bluePlayer = game.players[1].socketId;
   shuffle(weapons);
   let weaponsI = 0;
   for (let i = 0; i < 14; i++) {
@@ -191,7 +211,12 @@ exports.updateBoardForStart = (gameId) => {
 };
 
 exports.moveSoldier = ({ attackSoldier, cellToAttack }) => {
-  const game = getGameForPlayer(attackSoldier.player);
+  const game = getGameForPlayerBySocketId(attackSoldier.player);
   console.log("game:", game);
   return moveSoldier({ game, attackSoldier, cellToAttack });
+};
+
+exports.addChatMessage = ({ player, message }) => {
+  const game = getGameForPlayerBySocketId(player);
+  game.chat.push(message);
 };

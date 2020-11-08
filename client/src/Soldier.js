@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import styled, { css, keyframes } from "styled-components";
-
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 const Soldier = ({
   cellColor,
   playerColor,
@@ -22,79 +25,71 @@ const Soldier = ({
   setAttackerIndex,
   cellToMoveIndex,
   setCellToMoveIndex,
+  checkArrows,
+  arrayOfArrows,
 }) => {
   useEffect(() => {
     // setAttackerIndex(null);
     setCellToMoveIndex(null);
   }, []);
-  const handlePickFlagAndTrapsClick = () => {
-    if (!flag) {
-      chooseFlagClicked(index);
-    } else if (!trap) {
-      chooseTrapClicked(index);
-    }
-  };
-  const handleClick = () => {
-    console.log("TURN", turn);
-    console.log("playerColor", playerColor);
-    if (turn !== playerColor) {
-      //check if player try to click not in his turn
-      console.log("player try to click not in his turn");
-      return;
-    }
 
+  const handlePickFlagAndTrapsClick = () => {
+    if (!flag) chooseFlagClicked(index);
+    else if (!trap) chooseTrapClicked(index);
+  };
+
+  const handleClick = () => {
+    if (turn !== playerColor) return; //check if player try to click not in his turn
     if (attackSoldier) {
       // check if this is the second click that point on where the soldier want to move
-      console.log("attackSoldier");
       if (cellColor === playerColor) {
-        // check if i try to attck soldier of my team
-        console.log("cellColor === playerColor");
+        // check if the second click is on one of the same team soldiers
+        //if yes we want to change the attacker sodlier to this soldier
+        checkIfSoldierCanAttack();
         return;
       }
-      if (
-        // check if soldier try to move to place he can't
-        playerColor === "red" &&
-        attackSoldier.index + 7 !== index &&
-        attackSoldier.index + 1 !== index &&
-        attackSoldier.index - 1 !== index
-      )
-        return;
-      if (
-        playerColor === "blue" &&
-        attackSoldier.index + -7 !== index &&
-        attackSoldier.index + 1 !== index &&
-        attackSoldier.index - 1 !== index
-      )
-        return;
+      const check = checkIfAttackerCanMoveToCell();
+      if (!check) return;
 
       const cellToAttack = {
         ...board[index],
         index: index,
       };
-      console.log("cellToAttack", cellToAttack);
       moveSoldier(cellToAttack);
     } else {
       // if this is the first click to define the attacker soldier
-      if (weapon === "flag" || weapon === "trap") {
-        // you can't move the flag or the trap
-        console.log('weapon === "flag" || weapon === "trap"');
-        return;
-      }
-      if (playerColor !== cellColor) {
-        // you can't move the opponent soldier
-        console.log("playerColor !== cellColor");
-        return;
-      }
-      const attackingSoldier = {
-        ...board[index],
-        index: index,
-        player,
-      };
-      handleAttack(attackingSoldier);
+      checkIfSoldierCanAttack();
     }
+  };
 
-    //   if(board[i+7].weapon !== null && board[i+1] !==null && board[i-1] !== null) return;
-    //   if(turn === 'red' && index === 0)
+  const checkIfSoldierCanAttack = () => {
+    const attackingSoldier = checkIfFirstClickConfirm();
+    if (!attackingSoldier) return;
+    handleAttack(attackingSoldier);
+    checkArrows(index);
+  };
+
+  const checkIfFirstClickConfirm = () => {
+    if (weapon === "flag" || weapon === "trap") return false; // you can't move the flag or the trap
+    if (playerColor !== cellColor) return false; // you can't move the opponent soldier
+    const attackingSoldier = {
+      ...board[index],
+      index: index,
+      player,
+    };
+    return attackingSoldier;
+  };
+
+  const checkIfAttackerCanMoveToCell = () => {
+    if (
+      // check if soldier try to move to place he can't
+      attackSoldier.index + 7 !== index &&
+      attackSoldier.index + 1 !== index &&
+      attackSoldier.index - 1 !== index &&
+      attackSoldier.index - 7 !== index
+    )
+      return false;
+    return true;
   };
 
   let img;
@@ -141,16 +136,67 @@ const Soldier = ({
 
   let movingSoldierTo;
 
-  if (direction === "up") movingSoldierTo = "translateY(110%)";
-  else if (direction === "down") movingSoldierTo = "translateY(-110%)";
-  else if (direction === "right") movingSoldierTo = "translateX(-130%)";
-  else if (direction === "left") movingSoldierTo = "translateX(130%)";
+  if (direction === "up") movingSoldierTo = "translateY(125%)";
+  else if (direction === "down") movingSoldierTo = "translateY(-125%)";
+  else if (direction === "right") movingSoldierTo = "translateX(-125%)";
+  else if (direction === "left") movingSoldierTo = "translateX(125%)";
   //(playerColor === cellColor || exposed) ? weapon :
   return (
     <SoldierContainer
       onClick={!flag || !trap ? handlePickFlagAndTrapsClick : handleClick}
       // bgColor={cellColor}
     >
+      <>
+        <ArrowContainer
+          show={
+            attackSoldier &&
+            attackSoldier.index === index &&
+            arrayOfArrows.includes("left")
+          }
+          type={
+            attackSoldier && attackSoldier.index === index ? "left" : "none"
+          }
+        >
+          <ArrowBackIcon fontSize="large" />
+        </ArrowContainer>
+
+        <ArrowContainer
+          show={
+            attackSoldier &&
+            attackSoldier.index === index &&
+            arrayOfArrows.includes("right")
+          }
+          type={
+            attackSoldier && attackSoldier.index === index ? "right" : "none"
+          }
+        >
+          <ArrowForwardIcon fontSize="large" />
+        </ArrowContainer>
+
+        <ArrowContainer
+          show={
+            attackSoldier &&
+            attackSoldier.index === index &&
+            arrayOfArrows.includes("up")
+          }
+          type={attackSoldier && attackSoldier.index === index ? "up" : "none"}
+        >
+          <ArrowUpwardIcon fontSize="large" />
+        </ArrowContainer>
+        <ArrowContainer
+          show={
+            attackSoldier &&
+            attackSoldier.index === index &&
+            arrayOfArrows.includes("down")
+          }
+          type={
+            attackSoldier && attackSoldier.index === index ? "down" : "none"
+          }
+        >
+          <ArrowDownwardIcon fontSize="large" />
+        </ArrowContainer>
+      </>
+
       {img && (
         <Img
           src={require(`./images/${img}.png`).default}
@@ -175,6 +221,7 @@ const SoldierContainer = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   /* background-color: ${({ bgColor }) => bgColor}; */
   &:nth-child(2n) {
     background-color: #a5ce21;
@@ -201,11 +248,13 @@ const moving = (movingSoldierTo) => keyframes`
 
 const Img = styled.img`
   width: 80%;
+  position: relative;
+  z-index: 2;
   height: ${({ type, color }) => (type === "trap" && color ? "50%" : "80%")};
 
   animation: ${({ movingSoldierTo, animate }) =>
       animate && moving(movingSoldierTo)}
-    2s;
+    1.2s;
 `;
 
 /* anima
@@ -214,3 +263,18 @@ const Img = styled.img`
     css`
       ${moving(movingSoldierTo)}
     `}; */
+const ArrowContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  transition: all 0.8s;
+  transform: ${({ type }) => {
+    if (type === "left") return "translate(-180%, -50%)";
+    else if (type === "right") return "translate(75%, -50%)";
+    else if (type === "up") return "translate(-50%, -170%)";
+    else if (type === "down") return "translate(-50%, 80%)";
+    else return "translate(-50%,-50%)";
+  }};
+  opacity: ${({ show }) => (show ? ".4" : "0")};
+`;

@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const socketio = require("socket.io");
-
+const cors = require("cors");
 const PORT = process.env.PORT || 5000;
 
 const expressServer = app.listen(PORT, () => {
@@ -16,8 +16,10 @@ const leaveGameFactory = require("./handlers/leaveGameFactory");
 const chooseFlagFactory = require("./handlers/chooseFlagFactory");
 const chooseTrapFactory = require("./handlers/chooseTrapFactory");
 const moveSoldierFactory = require("./handlers/moveSoldierFactory");
+const chatMessageFactory = require("./handlers/chatMessageFactory");
 const sendGames = require("./helpers/sendGames");
 
+app.use(cors());
 io.on("connection", (socket) => {
   sendGames(socket);
   console.log("socket" + socket.id + "is enter the web");
@@ -28,5 +30,6 @@ io.on("connection", (socket) => {
   socket.on("choose-flag", chooseFlagFactory({ io, socket }));
   socket.on("choose-trap", chooseTrapFactory({ io, socket }));
   socket.on("move-soldier", moveSoldierFactory({ io, socket }));
+  socket.on("chat-message", chatMessageFactory({ io, socket }));
   // socket.on("disconnect", onDisconnectFactory({ io, socket }));
 });
