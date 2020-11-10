@@ -27,6 +27,10 @@ const Soldier = ({
   setCellToMoveIndex,
   checkArrows,
   arrayOfArrows,
+  war,
+  warDraw,
+  attackerBeforeWar,
+  defenderBeforeWar,
 }) => {
   useEffect(() => {
     // setAttackerIndex(null);
@@ -93,25 +97,51 @@ const Soldier = ({
   };
 
   let img;
-  if (playerColor == cellColor) {
-    if (weapon === "rock") img = `charmander-${playerColor}`;
-    else if (weapon === "paper") img = `squirtle-${playerColor}`;
-    else if (weapon === "scissors") img = `balbazor-${playerColor}`;
-    else if (weapon === "flag") img = `${playerColor}-flag`;
-    else if (weapon === "trap") img = `hole`;
-    else if (!weapon) img = `pokeball-${playerColor}`;
-  } else {
-    if (!exposed && cellColor !== "grey")
-      img = `pokeball-${playerColor === "red" ? "blue" : "red"}`;
-    else if (exposed) {
-      if (weapon === "rock")
-        img = `charmander-${playerColor === "red" ? "blue" : "red"}`;
-      if (weapon === "paper")
-        img = `squirtle-${playerColor === "red" ? "blue" : "red"}`;
-      if (weapon === "scissors")
-        img = `balbazor-${playerColor === "red" ? "blue" : "red"}`;
+
+  const checkSoldier = () => {
+    if (
+      (Object.keys(attackerBeforeWar).length !== 0 &&
+        Object.keys(defenderBeforeWar).length !== 0 &&
+        war) ||
+      (Object.keys(attackerBeforeWar).length !== 0 &&
+        Object.keys(defenderBeforeWar).length !== 0 &&
+        warDraw)
+    ) {
+      if (attackerBeforeWar.index === index) {
+        img = `pokeball-${attackerBeforeWar.color}`;
+      }
+      if (defenderBeforeWar.index === index) {
+        img = `pokeball-${defenderBeforeWar.color}`;
+      }
+      return;
     }
-  }
+    if (playerColor == cellColor && !exposed) {
+      if (weapon === "rock") img = `charmander-${playerColor}`;
+      else if (weapon === "paper") img = `squirtle-${playerColor}`;
+      else if (weapon === "scissors") img = `balbazor-${playerColor}`;
+      else if (weapon === "flag") img = `${playerColor}-flag`;
+      else if (weapon === "trap") img = `hole`;
+      else if (!weapon) img = `pokeball-${playerColor}`;
+    } else {
+      if (!exposed && cellColor !== "grey")
+        img = `pokeball-${playerColor === "red" ? "blue" : "red"}`;
+      else if (exposed && playerColor === cellColor) {
+        if (weapon === "rock") img = `charmander-${playerColor}-e`;
+        if (weapon === "paper") img = `squirtle-${playerColor}-e`;
+        if (weapon === "scissors") img = `balbazor-${playerColor}-e`;
+      } else if (exposed && playerColor !== cellColor) {
+        if (weapon === "rock")
+          img = `charmander-${playerColor === "red" ? "blue" : "red"}-e`;
+        if (weapon === "paper")
+          img = `squirtle-${playerColor === "red" ? "blue" : "red"}-e`;
+        if (weapon === "scissors")
+          img = `balbazor-${playerColor === "red" ? "blue" : "red"}-e`;
+      }
+    }
+  };
+
+  checkSoldier();
+
   // if (!weapon) {
   //   if (playerColor === cellColor && !exposed) {
   //     img = `pokeball-${playerColor}`;
@@ -143,6 +173,24 @@ const Soldier = ({
   //(playerColor === cellColor || exposed) ? weapon :
   return (
     <SoldierContainer
+      show={
+        (Object.keys(attackerBeforeWar).length !== 0 &&
+          Object.keys(defenderBeforeWar).length !== 0 &&
+          war &&
+          attackerBeforeWar.index === index) ||
+        (Object.keys(attackerBeforeWar).length !== 0 &&
+          Object.keys(defenderBeforeWar).length !== 0 &&
+          war &&
+          defenderBeforeWar.index === index) ||
+        (Object.keys(attackerBeforeWar).length !== 0 &&
+          Object.keys(defenderBeforeWar).length !== 0 &&
+          warDraw &&
+          attackerBeforeWar.index === index) ||
+        (Object.keys(attackerBeforeWar).length !== 0 &&
+          Object.keys(defenderBeforeWar).length !== 0 &&
+          warDraw &&
+          defenderBeforeWar.index === index)
+      }
       onClick={!flag || !trap ? handlePickFlagAndTrapsClick : handleClick}
       // bgColor={cellColor}
     >
@@ -206,6 +254,8 @@ const Soldier = ({
           type={weapon}
           movingSoldierTo={movingSoldierTo}
           animate={cellToMoveIndex ? cellToMoveIndex === index : false}
+          zIndexUp={war || warDraw}
+          scaleExposed={exposed && !war && !warDraw}
         />
       )}
     </SoldierContainer>
@@ -213,7 +263,16 @@ const Soldier = ({
 };
 
 export default Soldier;
+const opacityPokadors = keyframes`
+0% {
+  opacity: 1;
+}
 
+100% {
+  opacity: 0;
+}
+
+`;
 const SoldierContainer = styled.button`
   width: 14.2857143%;
   border: none;
@@ -222,6 +281,12 @@ const SoldierContainer = styled.button`
   align-items: center;
   justify-content: center;
   position: relative;
+  z-index: ${({ show }) => (show ? "351" : "auto")};
+  ${({ show }) =>
+    show &&
+    css`
+      animation: ${opacityPokadors} 0.2s 3s forwards;
+    `}
   /* background-color: ${({ bgColor }) => bgColor}; */
   &:nth-child(2n) {
     background-color: #a5ce21;
@@ -249,9 +314,9 @@ const moving = (movingSoldierTo) => keyframes`
 const Img = styled.img`
   width: 80%;
   position: relative;
+  /* z-index: ${({ zIndexUp }) => (zIndexUp ? "300" : "2")}; */
   z-index: 2;
   height: ${({ type, color }) => (type === "trap" && color ? "50%" : "80%")};
-
   animation: ${({ movingSoldierTo, animate }) =>
       animate && moving(movingSoldierTo)}
     1.2s;

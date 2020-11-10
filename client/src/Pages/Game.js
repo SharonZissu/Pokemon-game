@@ -34,6 +34,7 @@ const Game = ({
   defenderBeforeWar,
   closeModal,
   chooseWeaponDrawWar,
+  isChooseWeapon,
 }) => {
   // console.log(game);
 
@@ -46,6 +47,8 @@ const Game = ({
     AudioContext
   );
 
+  console.log("War:", war);
+  console.log("WarDraw:", warDraw);
   useEffect(() => {
     // battleAudio.load();
     return () => {
@@ -136,7 +139,6 @@ const Game = ({
 
   const chooseWeapon = (weapon, player) => {
     // console.log("from Game...", weapon);
-
     chooseWeaponDrawWar(weapon, player);
   };
 
@@ -197,6 +199,10 @@ const Game = ({
             setCellToMoveIndex={setCellToMoveIndex}
             checkArrows={checkArrows}
             arrayOfArrows={arrayOfArrows}
+            war={war}
+            warDraw={warDraw}
+            attackerBeforeWar={attackerBeforeWar}
+            defenderBeforeWar={defenderBeforeWar}
           />
         ))}
       </Board>
@@ -217,6 +223,7 @@ const Game = ({
         playerColor={color}
         closeModal={closeModal}
         chooseWeapon={chooseWeapon}
+        isChooseWeapon={isChooseWeapon}
       />
     </BoardContainer>
   );
@@ -275,7 +282,7 @@ const Game = ({
   const renderGameStart = () => (
     <>
       <RefereeContainer>
-        {!war ? (
+        {!war && !warDraw ? (
           <>
             <RedTurn turn={game.turn}>Red Turn</RedTurn>
 
@@ -305,7 +312,7 @@ const Game = ({
         )}
       </RefereeContainer>
       {renderBoard()}
-      {game.turn !== color && !war && (
+      {game.turn !== color && !war && !warDraw && (
         <SpinnerContainer turn={game.turn}>
           <Spinner />
           <WaitingText turn={game.turn}>
@@ -498,7 +505,7 @@ const Board = styled.div`
   position: relative;
   border: 0.2rem solid #e8f4c0;
   &::after {
-    content: "Battle!!";
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -506,7 +513,7 @@ const Board = styled.div`
     height: 100%;
     visibility: hidden;
     opacity: 0;
-    z-index: 150;
+    z-index: 350;
     font-size: 5rem;
     text-align: center;
     padding-top: 5rem;
@@ -518,7 +525,7 @@ const Board = styled.div`
     (war || warDraw) &&
     css`
       &::after {
-        animation: ${warAnimation} 0.4s 10;
+        animation: ${warAnimation} 0.4s 8;
       }
     `}
 `;

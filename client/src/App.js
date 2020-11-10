@@ -40,6 +40,8 @@ function App() {
   const [warResult, setWarResult] = useState("");
   const [attackerBeforeWar, setAttackerBeforeWar] = useState({});
   const [defenderBeforeWar, setDefenderBeforeWar] = useState({});
+  const [isChooseWeapon, setIsChooseWeapon] = useState(false);
+
   const {
     playSound,
     playWarSound,
@@ -148,8 +150,11 @@ function App() {
 
         setAttackerBeforeWar(attacker);
         setDefenderBeforeWar(defender);
+      } else {
+        checkDirection(attacker.index, defender.index);
+        setWarDraw(false);
+        setWar(false);
       }
-      checkDirection(attacker.index, defender.index);
 
       // setWarDetails({ result, attacker, defender });
       // setShowModal(true);
@@ -171,7 +176,7 @@ function App() {
       red.player.weapon = red.weapon;
       const blue = warArr.find((item) => item.color === "blue");
       blue.player.weapon = blue.weapon;
-
+      setWarDraw(false);
       // console.log("RED", red);
       // console.log("BLUE", blue);
       // console.log("GAMEEEEEEEEEEEEEE", game);
@@ -233,6 +238,7 @@ function App() {
     setWarResult("");
     setAttackerBeforeWar({});
     setDefenderBeforeWar({});
+    setIsChooseWeapon(false);
     let type = "war";
     socket.emit("move-soldier", { player, attackSoldier, cellToAttack, type });
     console.log('"moveSoldier:" socket.emit move-soldier');
@@ -254,6 +260,7 @@ function App() {
     setWarResult("");
     setAttackerBeforeWar({});
     setDefenderBeforeWar({});
+    setIsChooseWeapon(false);
   };
 
   const checkDirection = (attackerIndex, defenderIndex) => {
@@ -284,6 +291,7 @@ function App() {
   const chooseWeaponDrawWar = (weapon, player) => {
     // console.log(weapon);
     // console.log(color);
+    setIsChooseWeapon(true);
     socket.emit("choose-weapon", { weapon, color, player });
   };
   return (
@@ -347,6 +355,7 @@ function App() {
           defenderBeforeWar={defenderBeforeWar}
           closeModal={closeModal}
           chooseWeaponDrawWar={chooseWeaponDrawWar}
+          isChooseWeapon={isChooseWeapon}
         />
       )}
       <GlobalStyle />

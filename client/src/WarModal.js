@@ -159,8 +159,8 @@ const Container = styled.div`
   flex-direction: column;
   background-color: #c6de83;
   position: absolute;
-  transition: ${({ show }) => (show ? "all 0.5s 3.4s" : "all 0.5s")};
-  z-index: 250;
+  transition: ${({ show }) => (show ? "all 0.6s 3s" : "all 0.5s")};
+  z-index: 352;
   top: 50%;
   left: 50%;
   /* justify-content: center; */

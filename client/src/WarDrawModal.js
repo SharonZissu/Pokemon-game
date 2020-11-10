@@ -1,6 +1,7 @@
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
 import CloseIcon from "@material-ui/icons/Close";
+import Spinner from "./Spinner";
 const WarDrawModal = ({
   show,
   warResult,
@@ -10,6 +11,7 @@ const WarDrawModal = ({
   closeModal,
   chooseWeapon,
   player,
+  isChooseWeapon,
 }) => {
   const choose = (weapon) => {
     let player;
@@ -44,7 +46,8 @@ const WarDrawModal = ({
   return (
     <Container show={show}>
       {Object.keys(attackerBeforeWar).length !== 0 &&
-        Object.keys(defenderBeforeWar).length !== 0 && (
+        Object.keys(defenderBeforeWar).length !== 0 &&
+        (!isChooseWeapon ? (
           <>
             <Attacker
               winner={warResult}
@@ -84,7 +87,12 @@ const WarDrawModal = ({
               />
             </Defender>
           </>
-        )}
+        ) : (
+          <SpinnerContainer>
+            <Spinner />
+            <h1>Waiting for opponent...</h1>
+          </SpinnerContainer>
+        ))}
       {/* <h1>Attacker: {attackerBeforeWar.weapon}</h1>
       <h1>Defender: {defenderBeforeWar.weapon}</h1>
       <h1>Result: {warResult}</h1> */}
@@ -131,8 +139,8 @@ const Container = styled.div`
   flex-direction: column;
   background-color: #c6de83;
   position: absolute;
-  transition: ${({ show }) => (show ? "all 0.5s 3.4s" : "all 0.5s")};
-  z-index: 250;
+  transition: ${({ show }) => (show ? "all 0.6s 3s" : "all 0.5s")};
+  z-index: 349;
   top: 50%;
   left: 50%;
   /* justify-content: center; */
@@ -213,6 +221,17 @@ const Img = styled.img`
   width: 8rem;
 `;
 
+const SpinnerContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`;
 /*  ${({ showFirst }) =>
     showFirst
       ? css`
