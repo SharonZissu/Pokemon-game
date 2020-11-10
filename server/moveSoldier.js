@@ -1,4 +1,4 @@
-module.exports = ({ game, attackSoldier, cellToAttack }) => {
+module.exports = ({ game, attackSoldier, cellToAttack, type }) => {
   const {
     weapon: Aw,
     player: Ap,
@@ -9,7 +9,9 @@ module.exports = ({ game, attackSoldier, cellToAttack }) => {
   const { weapon: Dw, player: Dp, color: Dc, index: Di } = cellToAttack;
   console.log("attackSoldier", attackSoldier);
   console.log("cellToAttack", cellToAttack);
-  game.turn = game.turn === "red" ? "blue" : "red"; // change the game turn
+  if (type === "war") {
+    game.turn = game.turn === "red" ? "blue" : "red"; // change the game turn
+  }
 
   if (Dw === null) {
     //check if the destination is empty
@@ -46,6 +48,7 @@ module.exports = ({ game, attackSoldier, cellToAttack }) => {
       player: null,
       color: "grey",
     };
+
     return "attacker";
   } else if (
     //check if the attacker loses the defender
@@ -53,17 +56,23 @@ module.exports = ({ game, attackSoldier, cellToAttack }) => {
     (Aw === "paper" && Dw === "scissors") ||
     (Aw === "scissors" && Dw === "rock")
   ) {
+    console.log("HEREHEREHREHRE");
     game.board[Di] = {
       //mark that the defend soldier is exposed now
       ...game.board[Di],
+      weapon: Dw !== game.board[Di].weapon ? Dw : game.board[Di].weapon,
       exposed: true,
     };
+    console.log("DEFENCE AFTER:", game.board[Di]);
+
     game.board[Ai] = {
       //make the attacker cell empty
       weapon: null,
       player: null,
       color: "grey",
     };
+    console.log("ATTACKER AFTER:", game.board[Ai]);
+
     return "defender";
   } else {
     //check if is draw

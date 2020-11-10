@@ -10,11 +10,13 @@ module.exports = ({ io, socket }) => ({
   player,
   attackSoldier,
   cellToAttack,
+  type,
 }) => {
   const result = moveSoldier({
     player,
     attackSoldier,
     cellToAttack,
+    type,
   });
   io.emit("move-soldier-result", {
     result,

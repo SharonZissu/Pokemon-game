@@ -15,7 +15,7 @@ const Soldier = ({
   board,
   handleAttack,
   attackSoldier,
-  moveSoldier,
+  moveSoldierBefore,
   chooseFlagClicked,
   chooseTrapClicked,
   flag,
@@ -55,7 +55,7 @@ const Soldier = ({
         ...board[index],
         index: index,
       };
-      moveSoldier(cellToAttack);
+      moveSoldierBefore(cellToAttack);
     } else {
       // if this is the first click to define the attacker soldier
       checkIfSoldierCanAttack();

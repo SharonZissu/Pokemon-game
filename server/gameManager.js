@@ -2,6 +2,7 @@ const moveSoldier = require("./moveSoldier");
 
 let nextGameId = 0;
 let games = [];
+let warDrawArr = [];
 let weapons = [
   "rock",
   "rock",
@@ -210,13 +211,38 @@ exports.updateBoardForStart = (gameId) => {
   }
 };
 
-exports.moveSoldier = ({ attackSoldier, cellToAttack }) => {
+exports.moveSoldier = ({ attackSoldier, cellToAttack, type }) => {
   const game = getGameForPlayerBySocketId(attackSoldier.player);
-  console.log("game:", game);
-  return moveSoldier({ game, attackSoldier, cellToAttack });
+  return moveSoldier({ game, attackSoldier, cellToAttack, type });
 };
 
 exports.addChatMessage = ({ player, message }) => {
   const game = getGameForPlayerBySocketId(player);
   game.chat.push(message);
+};
+
+exports.updateWarArr = ({ weapon, color, player }) => {
+  console.log(weapon);
+  console.log(color);
+  console.log("PLAYERRR", player);
+  const game = getGameForPlayerBySocketId(player.player);
+
+  warDrawArr.push({
+    weapon,
+    color,
+    player,
+  });
+  console.log("WARDRAWAEE:", warDrawArr);
+  if (warDrawArr.length === 2) {
+    return [true, game.turn];
+  }
+  return [false, game.turn];
+};
+
+exports.getWarArr = () => {
+  return warDrawArr;
+};
+
+exports.clearWarArr = () => {
+  warDrawArr = [];
 };

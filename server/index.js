@@ -17,6 +17,7 @@ const chooseFlagFactory = require("./handlers/chooseFlagFactory");
 const chooseTrapFactory = require("./handlers/chooseTrapFactory");
 const moveSoldierFactory = require("./handlers/moveSoldierFactory");
 const chatMessageFactory = require("./handlers/chatMessageFactory");
+const chooseWeaponFactory = require("./handlers/chooseWeaponFactory");
 const sendGames = require("./helpers/sendGames");
 
 app.use(cors());
@@ -31,5 +32,6 @@ io.on("connection", (socket) => {
   socket.on("choose-trap", chooseTrapFactory({ io, socket }));
   socket.on("move-soldier", moveSoldierFactory({ io, socket }));
   socket.on("chat-message", chatMessageFactory({ io, socket }));
+  socket.on("choose-weapon", chooseWeaponFactory({ io, socket }));
   // socket.on("disconnect", onDisconnectFactory({ io, socket }));
 });

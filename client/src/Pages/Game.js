@@ -7,7 +7,8 @@ import Spinner from "../Spinner";
 import seaImg from "../images/sea.png";
 import Message from "../Message";
 import { AudioContext } from "../audio-context";
-import Modal from "../Modal";
+import WarModal from "../WarModal";
+import WarDrawModal from "../WarDrawModal";
 // import battleSound from "../sounds/battle-sound.mp3";
 const Game = ({
   game,
@@ -27,10 +28,12 @@ const Game = ({
   sendMessage,
   players,
   war,
+  warDraw,
   warResult,
   attackerBeforeWar,
   defenderBeforeWar,
   closeModal,
+  chooseWeaponDrawWar,
 }) => {
   // console.log(game);
 
@@ -46,7 +49,7 @@ const Game = ({
   useEffect(() => {
     // battleAudio.load();
     return () => {
-      console.log("pauseeeee");
+      // console.log("pauseeeee");
       // battleAudio.pause();
       // battleAudio.currentTime = 0;
       stopBattleSound();
@@ -62,16 +65,19 @@ const Game = ({
     screenEndRef.current.scrollIntoView({ behavior: "smooth" });
   };
   useEffect(() => {
-    console.log("CHATTTT:", game.chat);
-    console.log("GAMEEE:", game);
-    console.log(Object.keys(game));
+    // console.log("CHATTTT:", game.chat);
+    // console.log("GAMEEE:", game);
+    // console.log(Object.keys(game));
     if (Object.keys(game).includes("chat")) {
       if (game.chat.length !== 0) {
         scrollToBottom();
       }
     }
   }, [game.chat]);
-
+  const moveSoldierBefore = (cellToAttack) => {
+    moveSoldier(cellToAttack);
+    setArrayOfArrows([]);
+  };
   const checkArrows = (index) => {
     let arrayOfArrows = [];
     if (
@@ -128,6 +134,12 @@ const Game = ({
     playBattleSound();
   };
 
+  const chooseWeapon = (weapon, player) => {
+    // console.log("from Game...", weapon);
+
+    chooseWeaponDrawWar(weapon, player);
+  };
+
   const isTwoPlayersInRoom = () => {
     return game.numberOfPlayers === 2;
   };
@@ -159,7 +171,7 @@ const Game = ({
         </>
       </Place>
 
-      <Board war={war}>
+      <Board war={war} warDraw={warDraw}>
         {game.board.map((cell, i) => (
           <Soldier
             key={i}
@@ -172,7 +184,7 @@ const Game = ({
             board={game.board}
             handleAttack={handleAttack}
             attackSoldier={attackSoldier}
-            moveSoldier={moveSoldier}
+            moveSoldierBefore={moveSoldierBefore}
             exposed={cell.exposed}
             chooseTrapClicked={chooseTrapClicked}
             chooseFlagClicked={chooseFlagClicked}
@@ -189,13 +201,22 @@ const Game = ({
         ))}
       </Board>
       <BluePlayerName>{players[1].name}</BluePlayerName>
-      <Modal
+      <WarModal
         show={war}
         warResult={warResult}
         attackerBeforeWar={attackerBeforeWar}
         defenderBeforeWar={defenderBeforeWar}
         playerColor={color}
         closeModal={closeModal}
+      />
+      <WarDrawModal
+        show={warDraw}
+        warResult={warResult}
+        attackerBeforeWar={attackerBeforeWar}
+        defenderBeforeWar={defenderBeforeWar}
+        playerColor={color}
+        closeModal={closeModal}
+        chooseWeapon={chooseWeapon}
       />
     </BoardContainer>
   );
@@ -489,12 +510,12 @@ const Board = styled.div`
     font-size: 5rem;
     text-align: center;
     padding-top: 5rem;
-    display: ${({ war }) => (!war ? "none" : "block")};
+    display: ${({ war, warDraw }) => (war || warDraw ? "block" : "none")};
     /* background-color: red; */
   }
 
-  ${({ war }) =>
-    war &&
+  ${({ war, warDraw }) =>
+    (war || warDraw) &&
     css`
       &::after {
         animation: ${warAnimation} 0.4s 10;

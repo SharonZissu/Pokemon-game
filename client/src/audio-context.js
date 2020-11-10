@@ -31,17 +31,17 @@ const AudioProvider = ({ children }) => {
 
   // pause audio sound
   const pauseSound = () => {
-    console.log("pause");
+    // console.log("pause");
     audioTune.pause();
   };
 
   const pauseBattleSound = () => {
-    console.log("pause");
+    // console.log("pause");
     battleAudio.pause();
   };
 
   const pauseWarSound = () => {
-    console.log("pause");
+    // console.log("pause");
     warAudio.pause();
   };
 

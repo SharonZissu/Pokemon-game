@@ -5,7 +5,7 @@ import socket from "./socketConfig";
 import Lobby from "./Pages/Lobby";
 import CreateNewGame from "./Pages/CreateNewGame";
 import Game from "./Pages/Game";
-import Modal from "./Modal";
+import Modal from "./WarModal";
 import styled from "styled-components";
 import { GlobalStyle } from "./styles/globalStyle";
 import JoinGame from "./Pages/JoinGame";
@@ -36,6 +36,7 @@ function App() {
   const [created, setCreated] = useState(false);
   const [showOnSoundIcon, setShowOnSoundIcon] = useState(false);
   const [war, setWar] = useState(false);
+  const [warDraw, setWarDraw] = useState(false);
   const [warResult, setWarResult] = useState("");
   const [attackerBeforeWar, setAttackerBeforeWar] = useState({});
   const [defenderBeforeWar, setDefenderBeforeWar] = useState({});
@@ -54,12 +55,14 @@ function App() {
   useEffect(() => {
     const game = games.find((g) => g.id === gameId);
     if (!game) {
+      // console.log("GAME NOT FOUND FROM USEEEFECT");
+
       setGame({
         board: [],
       });
     } else {
       // console.log(game);
-
+      // console.log("GAME FROM USEEEFECT", game);
       setGame(game);
     }
   }, [games, gameId]);
@@ -72,7 +75,7 @@ function App() {
 
   useEffect(() => {
     socket.on("disconnect", () => {
-      console.log("socket.on(disconnect)");
+      // console.log("socket.on(disconnect)");
       setGameId(null);
       setColor("");
       setPage(PAGE_LOBBY);
@@ -81,21 +84,21 @@ function App() {
     });
 
     socket.on("games", (games) => {
-      console.log("socket.on(games)");
+      // console.log("socket.on(games)");
 
-      console.log(games);
+      // console.log(games);
       setGames(games);
     });
 
     socket.on("your-game-created", (gameId) => {
-      console.log("socket.on(your-game-created)");
+      // console.log("socket.on(your-game-created)");
 
       // console.log(gameId);
       setGameId(gameId);
     });
 
     socket.on("color", (color) => {
-      console.log("socket.on(color)");
+      // console.log("socket.on(color)");
       // console.log(color);
 
       setColor(color);
@@ -106,11 +109,17 @@ function App() {
     });
 
     socket.on("move-soldier-result", ({ result, attacker, defender }) => {
-      // console.log("attacker", attacker);
-      // console.log("defender", defender);
+      // console.log("attacker from move-soldier", attacker);
+      // console.log("defender from move-soldier", defender);
       // setAttackerIndex(attacker.index);
-      if (result !== "empty") {
+      if (result !== "empty" && result !== "draw") {
+        // console.log("YESSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+        console.log(
+          '"move-soldier-result:" setWar to true and setWarDraw to false'
+        );
+
         setWar(true);
+        setWarDraw(false);
         // warModalTimeout.current = setTimeout(() => {
         //   setWar(false);
         //   stopWarSound();
@@ -119,10 +128,24 @@ function App() {
         //   // setAttackerBeforeWar("");
         //   // setDefenderBeforeWar("");
         // }, 9000);
-        pauseBattleSound();
-        playWarSound();
+        // pauseBattleSound();
+        // playWarSound();
 
         setWarResult(result);
+        setAttackerBeforeWar(attacker);
+        setDefenderBeforeWar(defender);
+      } else if (result === "draw") {
+        // console.log("inside IFFIFIFIFIFIF");
+        // console.log(result);
+        setWarDraw(true);
+        setWar(false);
+
+        console.log(
+          '"move-soldier-result:" setWarDraw to true and setWar to false'
+        );
+
+        setWarResult(result);
+
         setAttackerBeforeWar(attacker);
         setDefenderBeforeWar(defender);
       }
@@ -139,6 +162,24 @@ function App() {
       // setShowModal(true);
       // setModalText('Your opponent has left the game');
       // setModalTitle('Game Over');
+    });
+
+    socket.on("choises-after-draw", ({ warArr, turn }) => {
+      // console.log("WarArr:", warArr);
+      // console.log("Turn:", turn);
+      const red = warArr.find((item) => item.color === "red");
+      red.player.weapon = red.weapon;
+      const blue = warArr.find((item) => item.color === "blue");
+      blue.player.weapon = blue.weapon;
+
+      // console.log("RED", red);
+      // console.log("BLUE", blue);
+      // console.log("GAMEEEEEEEEEEEEEE", game);
+      if (turn === "red") {
+        moveSoldierAfterDraw(blue.player, red.player);
+      } else {
+        moveSoldierAfterDraw(red.player, blue.player);
+      }
     });
   }, []);
 
@@ -167,26 +208,52 @@ function App() {
   };
 
   const handleAttack = (soldier) => {
-    console.log("HANDLE ATTACK");
+    // console.log("HANDLE ATTACK");
     // console.log(soldier);
     setAttackSoldier(soldier);
   };
 
   const moveSoldier = (cellToAttack, player) => {
-    console.log("INDEX1", game.board[attackSoldier.index].color);
-    console.log("INDEX2", game.board[cellToAttack.index].color);
+    // console.log("INDEX1", game.board[attackSoldier/index].color);
+    // console.log("INDEX2", game.board[cellToAttack.index].color);
+    // console.log("ATTACK SOLDIER", attackSoldier);
+    // console.log("PLAYER", player);
     if (
       game.board[attackSoldier.index].color !==
         game.board[cellToAttack.index].color &&
       game.board[cellToAttack.index].color !== "grey"
     ) {
-      playWarSound();
+      // playWarSound();
     } else {
       checkDirection(attackSoldier.index, cellToAttack.index);
     }
+    console.log('"moveSoldier:" setWar and setWarDraw to false');
     setWar(false);
-    socket.emit("move-soldier", { player, attackSoldier, cellToAttack });
-    setAttackSoldier();
+    setWarDraw(false);
+    setWarResult("");
+    setAttackerBeforeWar({});
+    setDefenderBeforeWar({});
+    let type = "war";
+    socket.emit("move-soldier", { player, attackSoldier, cellToAttack, type });
+    console.log('"moveSoldier:" socket.emit move-soldier');
+
+    if (attackSoldier.weapon !== cellToAttack.weapon) {
+      // console.log("if(attackSoldier.weapon !== cellToAttack.weapon)");
+      setAttackSoldier();
+    }
+  };
+
+  const moveSoldierAfterDraw = (attackSoldier, cellToAttack, player) => {
+    // console.log("attackerBeforeWar", attackerBeforeWar);
+    // console.log("attackerBeforeWar", defenderBeforeWar);
+    let type = "warDraw";
+
+    socket.emit("move-soldier", { player, attackSoldier, cellToAttack, type });
+    setWarDraw(false);
+    setWar(false);
+    setWarResult("");
+    setAttackerBeforeWar({});
+    setDefenderBeforeWar({});
   };
 
   const checkDirection = (attackerIndex, defenderIndex) => {
@@ -212,6 +279,12 @@ function App() {
   };
   const sendMessage = (message) => {
     socket.emit("chat-message", message);
+  };
+
+  const chooseWeaponDrawWar = (weapon, player) => {
+    // console.log(weapon);
+    // console.log(color);
+    socket.emit("choose-weapon", { weapon, color, player });
   };
   return (
     <Container>
@@ -268,10 +341,12 @@ function App() {
           sendMessage={sendMessage}
           players={game.newPlayers}
           war={war}
+          warDraw={warDraw}
           warResult={warResult}
           attackerBeforeWar={attackerBeforeWar}
           defenderBeforeWar={defenderBeforeWar}
           closeModal={closeModal}
+          chooseWeaponDrawWar={chooseWeaponDrawWar}
         />
       )}
       <GlobalStyle />

@@ -1,16 +1,27 @@
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
 import CloseIcon from "@material-ui/icons/Close";
-const Modal = ({
+const WarDrawModal = ({
   show,
   warResult,
   attackerBeforeWar,
   defenderBeforeWar,
   playerColor,
   closeModal,
+  chooseWeapon,
+  player,
 }) => {
-  console.log(attackerBeforeWar);
-  console.log(defenderBeforeWar);
+  const choose = (weapon) => {
+    let player;
+    if (attackerBeforeWar.color === playerColor) {
+      player = attackerBeforeWar;
+    } else {
+      player = defenderBeforeWar;
+    }
+    chooseWeapon(weapon, player);
+  };
+  // console.log(attackerBeforeWar);
+  // console.log(defenderBeforeWar);
   const checkImg = (weapon, color) => {
     switch (weapon) {
       case "rock":
@@ -35,12 +46,6 @@ const Modal = ({
       {Object.keys(attackerBeforeWar).length !== 0 &&
         Object.keys(defenderBeforeWar).length !== 0 && (
           <>
-            <CloseIconContainer>
-              <CloseIcon
-                onClick={closeModal}
-                style={{ height: "4rem", width: "4rem" }}
-              />
-            </CloseIconContainer>
             <Attacker
               winner={warResult}
               show={show}
@@ -53,6 +58,20 @@ const Modal = ({
               />
             </Attacker>
             {/* <h1>Vs</h1> */}
+            <ChoiseList>
+              <Choise
+                onClick={() => choose("rock")}
+                src={require(`./images/charmander-${playerColor}.png`).default}
+              />
+              <Choise
+                onClick={() => choose("scissors")}
+                src={require(`./images/balbazor-${playerColor}.png`).default}
+              />
+              <Choise
+                onClick={() => choose("paper")}
+                src={require(`./images/squirtle-${playerColor}.png`).default}
+              />
+            </ChoiseList>
             <Defender
               winner={warResult}
               show={show}
@@ -73,30 +92,8 @@ const Modal = ({
   );
 };
 
-export default Modal;
+export default WarDrawModal;
 
-const modalAnimation = keyframes`
-  0% {
-    transform: translate(-50%, -45%);
-
-  }
-
-  100% {
-    transform: translate(-50%, -44%);
-
-
-  }
-`;
-
-const opacityModal = keyframes`
-0%{
-  opacity: 0;
-  
-}
-100% {
-  opacity: 1;
-}
-`;
 const opacityWeapons = keyframes`
 0%{
   opacity: 0;
@@ -107,39 +104,21 @@ const opacityWeapons = keyframes`
 }
 `;
 
-const winnerAnimation = (type) => keyframes`
-0%{
-  transform: scale(1);
-}
+const clickMeAnimation = keyframes`
 
-100% {
-  
-    ${
-      type === "defender"
-        ? css`
-            transform: translateY(-8rem) scale(1.7);
-          `
-        : css`
-            transform: translateY(8rem) scale(1.7);
-          `
-    }
-  /* position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.7); */
+  0% {
+    transform: translate(-50%,-50%) scale(1);
+    box-shadow: none;
+  }
+  50% {
+    transform: translate(-50%,-50%) scale(1.05);
+    box-shadow: 0 1rem 4rem rgba(0, 0, 0, 0.25);
+  }
+  100% {
+    transform: translate(-50%,-50%) scale(1);
+    box-shadow: none;
+  }
 
-}
-`;
-
-const loserAnimation = keyframes`
-0%{
-  transform: scale(1);
-}
-
-100% {
-  transform:  scale(.4);
-  opacity: 0;
-  
 }
 `;
 
@@ -173,78 +152,62 @@ const Attacker = styled.div`
   display: flex;
   align-items: center;
   opacity: 0;
+  align-self: flex-start;
 
-  ${({ showFirst, winner, type }) =>
+  ${({ showFirst }) =>
     showFirst &&
-    winner === "attacker" &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
-    `}
-  ${({ showFirst, winner }) =>
-    showFirst &&
-    winner !== "attacker" &&
-    css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${loserAnimation} 1s 8s forwards; ;
+      animation: ${opacityWeapons} 0.2s 5s forwards;
     `}
 
-    ${({ showFirst, winner, type }) =>
+  ${({ showFirst }) =>
     !showFirst &&
-    winner === "attacker" &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
-    `}
-
-    ${({ showFirst, winner }) =>
-    !showFirst &&
-    winner !== "attacker" &&
-    css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${loserAnimation} 1s 8s forwards; ;
+      animation: ${opacityWeapons} 1s 6.5s forwards;
     `}
 `;
 const Defender = styled.div`
+  align-self: flex-end;
   flex: 1;
 
   display: flex;
   align-items: center;
   opacity: 0;
 
-  ${({ showFirst, winner, type }) =>
+  ${({ showFirst }) =>
     showFirst &&
-    winner === "defender" &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
-    `}
-  ${({ showFirst, winner }) =>
-    showFirst &&
-    winner !== "defender" &&
-    css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${loserAnimation} 1s 8s forwards;
+      animation: ${opacityWeapons} 0.2s 5s forwards;
     `}
 
-    ${({ showFirst, winner, type }) =>
+  ${({ showFirst }) =>
     !showFirst &&
-    winner === "defender" &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
-    `}
-
-    ${({ showFirst, winner }) =>
-    !showFirst &&
-    winner !== "defender" &&
-    css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${loserAnimation} 1s 8s forwards; ;
-      ;
+      animation: ${opacityWeapons} 1s 6.5s forwards;
     `}
 `;
 
+const ChoiseList = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+
+  animation: ${opacityWeapons} 0.2s 8s forwards, ${clickMeAnimation} 0.8s 8.2s 4;
+  /* border: 1px solid black; */
+`;
+
+const Choise = styled.img`
+  width: 6rem;
+  height: 8rem;
+  cursor: pointer;
+  :not(:last-child) {
+    margin-bottom: 1rem;
+  }
+`;
 const Img = styled.img`
   height: 12rem;
   width: 8rem;
