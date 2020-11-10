@@ -494,6 +494,9 @@ const BoardContainer = styled.div`
   align-items: center;
   background-color: #a5ce21;
   position: relative;
+  @media (min-height: 668px) {
+    height: 60vh;
+  }
 `;
 
 const Board = styled.div`
@@ -521,8 +524,15 @@ const Board = styled.div`
     /* background-color: red; */
   }
 
-  ${({ war, warDraw }) =>
-    (war || warDraw) &&
+  ${({ war }) =>
+    war &&
+    css`
+      &::after {
+        animation: ${warAnimation} 0.4s 8;
+      }
+    `}
+  ${({ warDraw }) =>
+    warDraw &&
     css`
       &::after {
         animation: ${warAnimation} 0.4s 8;
@@ -614,6 +624,9 @@ const ChatScreen = styled.div`
   margin-bottom: 1rem;
   overflow-y: scroll;
   padding: 0.6rem;
+  @media (min-height: 668px) {
+    height: 22vh;
+  }
 `;
 
 const SendMessage = styled.div`

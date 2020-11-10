@@ -136,6 +136,7 @@ function App() {
         setWarResult(result);
         setAttackerBeforeWar(attacker);
         setDefenderBeforeWar(defender);
+        setDirection("");
       } else if (result === "draw") {
         // console.log("inside IFFIFIFIFIFIF");
         // console.log(result);
@@ -150,6 +151,7 @@ function App() {
 
         setAttackerBeforeWar(attacker);
         setDefenderBeforeWar(defender);
+        setDirection("");
       } else {
         checkDirection(attacker.index, defender.index);
         setWarDraw(false);

@@ -166,7 +166,7 @@ const Container = styled.div`
   /* justify-content: center; */
   align-items: center;
   transform: ${({ show }) =>
-    show ? "translate(-50%,-50%)" : "translate(-50%, -240%)"};
+    show ? "translate(-50%,-50%)" : "translate(-50%, -300rem)"};
 `;
 
 const CloseIconContainer = styled.div`
@@ -254,7 +254,7 @@ const Defender = styled.div`
 
 const Img = styled.img`
   height: 12rem;
-  width: 8rem;
+  width: 9rem;
 `;
 
 /*  ${({ showFirst }) =>

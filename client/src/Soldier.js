@@ -96,6 +96,8 @@ const Soldier = ({
     return true;
   };
 
+  // console.log("attackerBeforeWar", attackerBeforeWar);
+  // console.log("defenderBeforeWar", defenderBeforeWar);
   let img;
 
   const checkSoldier = () => {
@@ -113,6 +115,41 @@ const Soldier = ({
       if (defenderBeforeWar.index === index) {
         img = `pokeball-${defenderBeforeWar.color}`;
       }
+      // if (
+      //   (attackerBeforeWar.index === index) &&
+      //   (playerColor !== attackerBeforeWar.color)
+      // ) {
+      //   img = `pokeball-${attackerBeforeWar.color}`;
+      //   console.log("HERERERERERERER POKEBALL ATTACKER");
+      // } else if (
+      //   attackerBeforeWar.index === index &&
+      //   playerColor === attackerBeforeWar.color
+      // ) {
+      //   if (attackerBeforeWar.weapon === "rock") {
+      //     img = `charmander-${attackerBeforeWar.color}`;
+      //     console.log("CHARMANDERRRRRRRRRRRRRRRR ");
+      //   }
+
+      //   if (attackerBeforeWar === "paper")
+      //     img = `squirtle-${attackerBeforeWar.color}`;
+      //   if (attackerBeforeWar === "scissors")
+      //     img = `balbazor-${attackerBeforeWar.color}`;
+      // } else if (
+      //   defenderBeforeWar.index === index &&
+      //   playerColor !== defenderBeforeWar.color
+      // ) {
+      //   img = `pokeball-${defenderBeforeWar.color}`;
+      // } else if (
+      //   defenderBeforeWar.index === index &&
+      //   playerColor === defenderBeforeWar.color
+      // ) {
+      //   if (defenderBeforeWar.weapon === "rock")
+      //     img = `charmander-${defenderBeforeWar.color}`;
+      //   if (defenderBeforeWar === "paper")
+      //     img = `squirtle-${defenderBeforeWar.color}`;
+      //   if (defenderBeforeWar === "scissors")
+      //     img = `balbazor-${defenderBeforeWar.color}`;
+      // }
       return;
     }
     if (playerColor == cellColor && !exposed) {
@@ -266,10 +303,14 @@ export default Soldier;
 const opacityPokadors = keyframes`
 0% {
   opacity: 1;
+  visibility: hidden;
+
 }
 
 100% {
   opacity: 0;
+  visibility: hidden;
+
 }
 
 `;

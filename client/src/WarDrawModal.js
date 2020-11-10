@@ -146,7 +146,7 @@ const Container = styled.div`
   /* justify-content: center; */
   align-items: center;
   transform: ${({ show }) =>
-    show ? "translate(-50%,-50%)" : "translate(-50%, -240%)"};
+    show ? "translate(-50%,-50%)" : "translate(-50%, -300rem)"};
 `;
 
 const CloseIconContainer = styled.div`
@@ -161,6 +161,7 @@ const Attacker = styled.div`
   align-items: center;
   opacity: 0;
   align-self: flex-start;
+  margin-left: 1rem;
 
   ${({ showFirst }) =>
     showFirst &&
@@ -181,6 +182,7 @@ const Defender = styled.div`
   display: flex;
   align-items: center;
   opacity: 0;
+  margin-right: 1rem;
 
   ${({ showFirst }) =>
     showFirst &&
@@ -209,7 +211,7 @@ const ChoiseList = styled.div`
 `;
 
 const Choise = styled.img`
-  width: 6rem;
+  width: 7rem;
   height: 8rem;
   cursor: pointer;
   :not(:last-child) {
@@ -218,7 +220,7 @@ const Choise = styled.img`
 `;
 const Img = styled.img`
   height: 12rem;
-  width: 8rem;
+  width: 9rem;
 `;
 
 const SpinnerContainer = styled.div`
