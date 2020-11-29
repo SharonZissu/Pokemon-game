@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Footer from "../Footer";
 import styled from "styled-components";
 import joinImg from "../images/joinGame-img.png";
 // import joinImg from "../images/background.png";
+
 import Modal from "../Modal";
+import VoulmeIcons from "../VoulmeIcons";
 
 const JoinGame = ({ games, joinGame, setPage }) => {
   const [showModal, setShowModal] = useState(false);
   const [gameId, setGameId] = useState(false);
   const [name, setName] = useState("");
-
   const handleChangeName = (e) => {
     setName(e.target.value);
   };
@@ -28,6 +29,8 @@ const JoinGame = ({ games, joinGame, setPage }) => {
   return (
     <>
       <Container>
+        <VoulmeIcons />
+
         <Modal
           type="join"
           show={showModal}
@@ -72,7 +75,6 @@ const JoinGame = ({ games, joinGame, setPage }) => {
           )}
         </TableContainer>
         <Button onClick={() => setPage("Lobby")}>Back To Lobby</Button>
-
         <Footer />
       </Container>
     </>
@@ -88,6 +90,23 @@ const Container = styled.div`
   overflow: hidden;
   height: 100vh;
   background-color: #f6f6f6;
+`;
+
+// const VolumeContainer = styled.div`
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+// `;
+
+const VolumeOffContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 1rem;
+`;
+const VolumeOnContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 1rem;
 `;
 
 const Img = styled.img`

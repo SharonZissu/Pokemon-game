@@ -20,7 +20,6 @@ html {
 
 body {
   /* font-family: 'Spectral SC', serif; */
-
   line-height: 1.6;
   color: black;
 }

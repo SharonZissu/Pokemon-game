@@ -10,6 +10,7 @@ import { AudioContext } from "../audio-context";
 import WarModal from "../WarModal";
 import WarDrawModal from "../WarDrawModal";
 import WaitingBg from "../images/pokador-waiting.png";
+import VoulmeIcons from "../VoulmeIcons";
 // import battleSound from "../sounds/battle-sound.mp3";
 const Game = ({
   game,
@@ -178,6 +179,7 @@ const Game = ({
 
   const renderBoard = () => (
     <BoardContainer>
+      <VoulmeIcons type="game" />
       <RedPlayerName>{players[0].name}</RedPlayerName>
 
       <Place hide={flag && trap && gameStartAfterFlagsAndTraps}>
@@ -613,14 +615,14 @@ const Board = styled.div`
     war &&
     css`
       &::after {
-        animation: ${warAnimation} 0.4s 8;
+        animation: ${warAnimation} 0.2s 8;
       }
     `}
   ${({ warDraw }) =>
     warDraw &&
     css`
       &::after {
-        animation: ${warAnimation} 0.4s 8;
+        animation: ${warAnimation} 0.2s 8;
       }
     `}
 `;

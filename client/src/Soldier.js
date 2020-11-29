@@ -326,7 +326,7 @@ const SoldierContainer = styled.button`
   ${({ show }) =>
     show &&
     css`
-      animation: ${opacityPokadors} 0.2s 3s forwards;
+      animation: ${opacityPokadors} 0.2s 1.6s forwards;
     `}
   /* background-color: ${({ bgColor }) => bgColor}; */
   &:nth-child(2n) {

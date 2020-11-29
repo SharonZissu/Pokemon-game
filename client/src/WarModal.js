@@ -38,16 +38,16 @@ const WarModal = ({
   }
 
   return (
-    <Container show={show}>
+    <Container show={show} closeModal={closeModal}>
       {Object.keys(attackerBeforeWar).length !== 0 &&
         Object.keys(defenderBeforeWar).length !== 0 && (
           <>
-            <CloseIconContainer>
+            {/* <CloseIconContainer>
               <CloseIcon
                 onClick={closeModal}
                 style={{ height: "4rem", width: "4rem" }}
               />
-            </CloseIconContainer>
+            </CloseIconContainer> */}
             <Attacker
               winner={warResult}
               show={show}
@@ -95,13 +95,16 @@ const modalAnimation = keyframes`
   }
 `;
 
-const opacityModal = keyframes`
+const opacityModal = (closeModal) => keyframes`
 0%{
-  opacity: 0;
+  opacity: 1;
   
 }
 100% {
-  opacity: 1;
+  opacity: 0;
+  ${setTimeout(() => {
+    closeModal();
+  }, 7000)}
 }
 `;
 const opacityWeapons = keyframes`
@@ -151,15 +154,15 @@ const loserAnimation = keyframes`
 `;
 
 const Container = styled.div`
-  opacity: ${({ show }) => (show ? "1" : "0")};
-  visibility: ${({ show }) => (show ? "visible" : "hidden")};
+  /* opacity: ${({ show }) => (show ? "1" : "0")};
+  visibility: ${({ show }) => (show ? "visible" : "hidden")}; */
   width: 85%;
   height: 65%;
   display: flex;
   flex-direction: column;
   background-color: #c6de83;
   position: absolute;
-  transition: ${({ show }) => (show ? "all 0.6s 3s" : "all 0.5s")};
+  transition: ${({ show }) => (show ? "all 0.6s 1.5s" : "all 0.5s")};
   z-index: 352;
   top: 50%;
   left: 50%;
@@ -167,6 +170,11 @@ const Container = styled.div`
   align-items: center;
   transform: ${({ show }) =>
     show ? "translate(-50%,-50%)" : "translate(-50%, -300rem)"};
+  ${({ show, closeModal }) =>
+    show &&
+    css`
+      animation: ${opacityModal(closeModal)} 0.2s 11s forwards;
+    `}
 `;
 
 const CloseIconContainer = styled.div`
@@ -185,31 +193,31 @@ const Attacker = styled.div`
     showFirst &&
     winner === "attacker" &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
+      animation: ${opacityWeapons} 0.2s 3s forwards,
+        ${winnerAnimation(type)} 1s 5s forwards;
     `}
   ${({ showFirst, winner }) =>
     showFirst &&
     winner !== "attacker" &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${loserAnimation} 1s 8s forwards; ;
+      animation: ${opacityWeapons} 0.2s 3s forwards,
+        ${loserAnimation} 1s 5s forwards; ;
     `}
 
     ${({ showFirst, winner, type }) =>
     !showFirst &&
     winner === "attacker" &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
+      animation: ${opacityWeapons} 1s 4s forwards,
+        ${winnerAnimation(type)} 1s 5s forwards;
     `}
 
     ${({ showFirst, winner }) =>
     !showFirst &&
     winner !== "attacker" &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${loserAnimation} 1s 8s forwards; ;
+      animation: ${opacityWeapons} 1s 4s forwards,
+        ${loserAnimation} 1s 5s forwards; ;
     `}
 `;
 const Defender = styled.div`
@@ -223,31 +231,31 @@ const Defender = styled.div`
     showFirst &&
     winner === "defender" &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
+      animation: ${opacityWeapons} 0.2s 3s forwards,
+        ${winnerAnimation(type)} 1s 5s forwards;
     `}
   ${({ showFirst, winner }) =>
     showFirst &&
     winner !== "defender" &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards,
-        ${loserAnimation} 1s 8s forwards;
+      animation: ${opacityWeapons} 0.2s 3s forwards,
+        ${loserAnimation} 1s 5s forwards;
     `}
 
     ${({ showFirst, winner, type }) =>
     !showFirst &&
     winner === "defender" &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${winnerAnimation(type)} 1s 8s forwards;
+      animation: ${opacityWeapons} 1s 4s forwards,
+        ${winnerAnimation(type)} 1s 5s forwards;
     `}
 
     ${({ showFirst, winner }) =>
     !showFirst &&
     winner !== "defender" &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards,
-        ${loserAnimation} 1s 8s forwards; ;
+      animation: ${opacityWeapons} 1s 4s forwards,
+        ${loserAnimation} 1s 5s forwards; ;
       ;
     `}
 `;
@@ -263,5 +271,5 @@ const Img = styled.img`
           animation: ${opacityWeapons} 1s 5s forwards;
         `
       : css`
-          animation: ${opacityWeapons} 1s 6.5s forwards;
+          animation: ${opacityWeapons} 1s 5s forwards;
         `}; */

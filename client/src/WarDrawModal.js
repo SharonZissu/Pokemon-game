@@ -139,7 +139,7 @@ const Container = styled.div`
   flex-direction: column;
   background-color: #c6de83;
   position: absolute;
-  transition: ${({ show }) => (show ? "all 0.6s 3s" : "all 0.5s")};
+  transition: ${({ show }) => (show ? "all 0.6s 1.6s" : "all 0.5s")};
   z-index: 349;
   top: 50%;
   left: 50%;
@@ -166,13 +166,13 @@ const Attacker = styled.div`
   ${({ showFirst }) =>
     showFirst &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards;
+      animation: ${opacityWeapons} 0.4s 2.5s forwards;
     `}
 
   ${({ showFirst }) =>
     !showFirst &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards;
+      animation: ${opacityWeapons} 0.4s 3.5s forwards;
     `}
 `;
 const Defender = styled.div`
@@ -187,13 +187,13 @@ const Defender = styled.div`
   ${({ showFirst }) =>
     showFirst &&
     css`
-      animation: ${opacityWeapons} 0.2s 5s forwards;
+      animation: ${opacityWeapons} 0.4s 2.5s forwards;
     `}
 
   ${({ showFirst }) =>
     !showFirst &&
     css`
-      animation: ${opacityWeapons} 1s 6.5s forwards;
+      animation: ${opacityWeapons} 0.4s 3.5s forwards;
     `}
 `;
 
@@ -206,7 +206,8 @@ const ChoiseList = styled.div`
   flex-direction: column;
   opacity: 0;
 
-  animation: ${opacityWeapons} 0.2s 8s forwards, ${clickMeAnimation} 0.8s 8.2s 4;
+  animation: ${opacityWeapons} 0.2s 4.5s forwards,
+    ${clickMeAnimation} 0.8s 4.7s 4;
   /* border: 1px solid black; */
 `;
 

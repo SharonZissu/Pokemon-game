@@ -8,13 +8,10 @@ import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import Footer from "./../Footer";
-import VolumeUpIcon from "@material-ui/icons/VolumeUp";
-import VolumeOffIcon from "@material-ui/icons/VolumeOff";
-import { AudioContext } from "../audio-context";
+import VoulmeIcons from "../VoulmeIcons";
 
 // let count = 0;
 const Lobby = ({ games, setPage, joinGame }) => {
-  const { playSound, stopSound } = useContext(AudioContext);
   // const [audioPlaying, setAudioPlaying] = useState(false);
   // var audioTune = new Audio(sound);
 
@@ -41,7 +38,7 @@ const Lobby = ({ games, setPage, joinGame }) => {
   // };
 
   const handleClick = (type) => {
-    playSound();
+    // playSound();
     switch (type) {
       case "create":
         setPage("CreateNewGame");
@@ -59,6 +56,7 @@ const Lobby = ({ games, setPage, joinGame }) => {
   };
   return (
     <Container>
+      <VoulmeIcons />
       <CreateBtn onClick={() => handleClick("create")}>Create</CreateBtn>
       <JoinBtn onClick={() => handleClick("join")}>Join</JoinBtn>
       <RulesBtn onClick={() => handleClick("rules")}>Rules</RulesBtn>
@@ -112,6 +110,16 @@ const Container = styled.div`
   background-size: cover;
 `;
 
+const VolumeOffContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 1rem;
+`;
+const VolumeOnContainer = styled.div`
+  position: absolute;
+  top: 0;
+  right: 1rem;
+`;
 const Img = styled.img`
   width: 100%;
   flex: 0 0 40%;
@@ -235,17 +243,6 @@ const RulesBtn = styled(Button)`
 //   }
 // `;
 
-const VolumeUpContainer = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  opacity: ${({ audioPlaying }) => (audioPlaying ? "0" : "1")};
-`;
-const VolumeOffContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-`;
 // const CreateButton = styled.button``;
 
 // const JoinButton = styled(CreateButton)`

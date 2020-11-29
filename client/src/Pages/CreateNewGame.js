@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import createGameImg from "../images/createGameImg.jpg";
 import Footer from "../Footer";
+import VoulmeIcons from "../VoulmeIcons";
 import styled from "styled-components";
 
 const CreateNewGame = ({ createGame, setPage }) => {
@@ -9,6 +10,7 @@ const CreateNewGame = ({ createGame, setPage }) => {
 
   return (
     <Container>
+      <VoulmeIcons />
       <Img src={createGameImg} alt="create game img" />
       <NewGame>
         <InputContainer>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import logo from "./logo.svg";
-import "./App.css";
+// import "./App.css";
 import socket from "./socketConfig";
 import Lobby from "./Pages/Lobby";
 import CreateNewGame from "./Pages/CreateNewGame";
@@ -52,7 +52,7 @@ function App() {
   } = useContext(AudioContext);
   const warModalTimeout = useRef();
   useEffect(() => {
-    if (page !== "Lobby") playSound();
+    // if (page !== "Lobby") playSound();
   }, [page]);
 
   useEffect(() => {
@@ -285,6 +285,15 @@ function App() {
   };
 
   const closeModal = () => {
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
+    console.log("HERE IN CLOSE MODAL");
     setWar(false);
     setWarResult("");
     setAttackerBeforeWar("");

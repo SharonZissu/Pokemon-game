@@ -10,6 +10,7 @@ const AudioProvider = ({ children }) => {
   let audioTune = new Audio(sound);
   let battleAudio = new Audio(battleSound);
   let warAudio = new Audio(warSound);
+  // const [audioTuneState, setAudioTuneState] = useState(false);
 
   useEffect(() => {
     audioTune.load();
@@ -18,6 +19,7 @@ const AudioProvider = ({ children }) => {
 
   const playSound = () => {
     audioTune.play();
+    // setAudioTuneState(true);
   };
 
   const playBattleSound = () => {
@@ -47,8 +49,10 @@ const AudioProvider = ({ children }) => {
 
   // stop audio sound
   const stopSound = () => {
+    console.log("stoping sound");
     audioTune.pause();
     audioTune.currentTime = 0;
+    // setAudioTuneState(false);
   };
 
   const stopBattleSound = () => {
