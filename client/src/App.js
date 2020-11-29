@@ -5,11 +5,11 @@ import socket from "./socketConfig";
 import Lobby from "./Pages/Lobby";
 import CreateNewGame from "./Pages/CreateNewGame";
 import Game from "./Pages/Game";
-import Modal from "./WarModal";
 import styled from "styled-components";
 import { GlobalStyle } from "./styles/globalStyle";
 import JoinGame from "./Pages/JoinGame";
 import { AudioContext } from "./audio-context";
+import Modal from "./Modal";
 // import ReactAudioPlayer from "react-audio-player";
 
 const PAGE_GAME = "Game";
@@ -41,6 +41,7 @@ function App() {
   const [attackerBeforeWar, setAttackerBeforeWar] = useState({});
   const [defenderBeforeWar, setDefenderBeforeWar] = useState({});
   const [isChooseWeapon, setIsChooseWeapon] = useState(false);
+  const [leaveModal, setLeaveModal] = useState(false);
 
   const {
     playSound,
@@ -152,6 +153,8 @@ function App() {
         setAttackerBeforeWar(attacker);
         setDefenderBeforeWar(defender);
         setDirection("");
+      } else if (result === "flag") {
+      } else if (result === "trap") {
       } else {
         checkDirection(attacker.index, defender.index);
         setWarDraw(false);
@@ -166,6 +169,7 @@ function App() {
       setGameId(null);
       setColor("");
       setPage(PAGE_LOBBY);
+      openLeaveModal(true);
       // setShowModal(true);
       // setModalText('Your opponent has left the game');
       // setModalTitle('Game Over');
@@ -296,6 +300,11 @@ function App() {
     setIsChooseWeapon(true);
     socket.emit("choose-weapon", { weapon, color, player });
   };
+
+  const closeLeaveModal = () => setLeaveModal(false);
+  const openLeaveModal = () => {
+    setLeaveModal(true);
+  };
   return (
     <Container>
       {/* <input
@@ -319,12 +328,19 @@ function App() {
       ></input> */}
 
       {page === PAGE_LOBBY && (
-        <Lobby
-          games={games}
-          joinGame={joinGame}
-          setPage={setPage}
-          showOnSoundIcon={showOnSoundIcon}
-        />
+        <>
+          <Modal
+            type="leave"
+            show={leaveModal}
+            closeLeaveModal={closeLeaveModal}
+          />
+          <Lobby
+            games={games}
+            joinGame={joinGame}
+            setPage={setPage}
+            showOnSoundIcon={showOnSoundIcon}
+          />
+        </>
       )}
       {page === PAGE_CREATE_NEW_GAME && (
         <CreateNewGame createGame={createGame} setPage={setPage} />
@@ -358,6 +374,8 @@ function App() {
           closeModal={closeModal}
           chooseWeaponDrawWar={chooseWeaponDrawWar}
           isChooseWeapon={isChooseWeapon}
+          openLeaveModal={openLeaveModal}
+          setPage={setPage}
         />
       )}
       <GlobalStyle />

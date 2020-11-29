@@ -29,6 +29,10 @@ module.exports = ({ game, attackSoldier, cellToAttack, type }) => {
       color: "grey",
     };
     return "empty";
+  } else if (Dw === "flag") {
+    return "winner";
+  } else if (Dw === "trap") {
+    return "trap";
   } else if (
     //check if the attacker wins the defender
     (Aw === "rock" && Dw === "scissors") ||

@@ -9,6 +9,7 @@ import Message from "../Message";
 import { AudioContext } from "../audio-context";
 import WarModal from "../WarModal";
 import WarDrawModal from "../WarDrawModal";
+import WaitingBg from "../images/pokador-waiting.png";
 // import battleSound from "../sounds/battle-sound.mp3";
 const Game = ({
   game,
@@ -35,6 +36,8 @@ const Game = ({
   closeModal,
   chooseWeaponDrawWar,
   isChooseWeapon,
+  openLeaveModal,
+  setPage,
 }) => {
   // console.log(game);
 
@@ -42,6 +45,8 @@ const Game = ({
   const [trap, setTrap] = useState(false);
   const [arrayOfArrows, setArrayOfArrows] = useState([]);
   const [message, setMessage] = useState("");
+  const [backToLobbyClicked, setBackToLobbyClicked] = useState(false);
+
   const screenEndRef = useRef(null);
   const { playBattleSound, stopBattleSound, stopSound } = useContext(
     AudioContext
@@ -57,6 +62,16 @@ const Game = ({
       // battleAudio.currentTime = 0;
       stopBattleSound();
       leaveGame();
+      console.log(backToLobbyClicked);
+      // openLeaveModal();
+
+      // setLeaveModal(true);
+
+      // if (!backToLobbyClicked) {
+      //   openLeaveModal(true);
+      // } else {
+      //   setBackToLobbyClicked(false);
+      // }
     };
   }, []);
 
@@ -157,6 +172,10 @@ const Game = ({
     setMessage("");
   };
 
+  const handleBackToLobby = () => {
+    setPage("Lobby");
+  };
+
   const renderBoard = () => (
     <BoardContainer>
       <RedPlayerName>{players[0].name}</RedPlayerName>
@@ -230,7 +249,14 @@ const Game = ({
 
   const renderWaiting = () => (
     <Waiting>
-      <Spinner />
+      <BackToLobbyBtn onClick={handleBackToLobby}>
+        Back To Lobby &rarr;
+      </BackToLobbyBtn>
+      <PokadorImg src={WaitingBg} />
+      <SpinnerContainerWaiting>
+        <Spinner size="big" color="white" />
+      </SpinnerContainerWaiting>
+
       <WaitingTextBeforeStart turn={game.turn}>
         Waiting for opponent..
       </WaitingTextBeforeStart>
@@ -382,10 +408,32 @@ const Container = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: hidden;
 `;
 
 ////////////////ONE PLAYER IN ROOM
-const WaitingTextBeforeStart = styled.h1``;
+const WaitingTextBeforeStart = styled.h1`
+  font-size: 3rem;
+  position: absolute;
+  bottom: 8rem;
+  left: 50%;
+  width: 95%;
+  border-radius: 3rem;
+  transform: translateX(-50%);
+  /* background-color: #c20404; */
+  /* background-color: #e8e7e3; */
+  padding: 0.4rem 1.5rem;
+  color: #c20404;
+  text-align: center;
+  opacity: 0.8;
+  /* margin-bottom: 6rem; */
+`;
+
+const PokadorImg = styled.img`
+  width: 100%;
+  /* height: 200vh; */
+`;
 
 ////////////////GAME WAITING
 const SpinnerContainer = styled.div`
@@ -398,6 +446,12 @@ const SpinnerContainer = styled.div`
   z-index: 5;
 `;
 
+const SpinnerContainerWaiting = styled.div`
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 const WaitingText = styled.h2`
   position: absolute;
   right: ${({ turn }) => (turn === "red" ? "2rem" : "auto")};
@@ -407,6 +461,37 @@ const WaitingText = styled.h2`
   opacity: ${animateOpacity} 0.2s 5s 3;
   font-size: 1.2rem;
   text-align: center;
+`;
+
+const Waiting = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  color: white;
+  /* justify-content: flex-end; */
+  padding-bottom: 13rem;
+  /* opacity: 0.7; */
+  /* background-image: url(${WaitingBg});
+  background-size: cover;
+  overflow: hidden; */
+  /* background-repeat: no-repeat; */
+  /* background-position: top;
+  background-position: 50% 80%; */
+`;
+
+const BackToLobbyBtn = styled.button`
+  background-color: transparent;
+  color: #c20404;
+
+  width: 65%;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  border: none;
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 ////////////////REFEREE
@@ -595,14 +680,6 @@ const RedPlayerName = styled(PlayerName)`
 const BluePlayerName = styled(PlayerName)`
   color: #a236d2;
   margin-top: 1rem;
-`;
-
-const Waiting = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `;
 
 //////////CHAT

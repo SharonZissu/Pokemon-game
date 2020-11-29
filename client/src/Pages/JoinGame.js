@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Footer from "../Footer";
 import styled from "styled-components";
-import joinImg from "../images/background.png";
-import JoinModal from "../JoinModal";
+import joinImg from "../images/joinGame-img.png";
+// import joinImg from "../images/background.png";
+import Modal from "../Modal";
 
 const JoinGame = ({ games, joinGame, setPage }) => {
   const [showModal, setShowModal] = useState(false);
@@ -23,14 +24,15 @@ const JoinGame = ({ games, joinGame, setPage }) => {
     joinGame(gameId, name);
   };
 
-  const closeModal = () => setShowModal(false);
+  const closeJoinModal = () => setShowModal(false);
   return (
     <>
       <Container>
-        <JoinModal
+        <Modal
+          type="join"
           show={showModal}
           joinGameHandler={joinGameHandler}
-          closeModal={closeModal}
+          closeJoinModal={closeJoinModal}
           handleChangeName={handleChangeName}
         />
         <Img src={joinImg} alt="join game img" />
@@ -90,23 +92,28 @@ const Container = styled.div`
 
 const Img = styled.img`
   width: 100%;
-  flex: 0 0 50%;
+  flex: 0 0 40%;
 `;
 
 const TableContainer = styled.div`
   width: 100%;
   overflow-y: scroll;
-  flex: 0 0 25%;
+  flex: 0 0 35%;
   display: block;
+  padding-top: 2rem;
   /* border: 1px solid black; */
   border-right: none;
   border-left: none;
-  background-color: #c6de83;
+  /* background-color: #c6de83; */
+  background-color: #f6f6f6;
+
   position: relative;
 `;
 const Table = styled.table`
   border-collapse: collapse;
-  background-color: #c6de83;
+  /* background-color: #c6de83; */
+  background-color: #f6f6f6;
+
   line-height: 0;
   width: 100%;
 
@@ -151,7 +158,7 @@ const Button = styled.button`
   border: none;
   background-color: #a5ce21;
   align-self: auto;
-  font-size: 3rem;
+  font-size: 2.7rem;
   font-family: inherit;
   text-transform: uppercase;
   padding: 1rem 2rem;
@@ -166,4 +173,5 @@ const JoinBtn = styled(Button)`
   padding: 0;
   padding: 1rem 0;
   font-size: 2.5rem;
+  background-color: #c6de83;
 `;
