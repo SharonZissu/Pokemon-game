@@ -343,6 +343,7 @@ const Game = ({
         winner={winner}
         players={players}
         handleBackToLobby={handleBackToLobby}
+        stopBattleSound={stopBattleSound}
       />
       <RefereeContainer>
         {!war && !warDraw ? (

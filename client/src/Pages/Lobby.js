@@ -49,9 +49,6 @@ const Lobby = ({ games, setPage, joinGame }) => {
       case "rules":
         setPage("Rules");
         break;
-      case "about":
-        setPage("About");
-        break;
     }
   };
   return (

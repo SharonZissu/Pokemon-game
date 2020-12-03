@@ -2,9 +2,15 @@ import React from "react";
 import styled, { css } from "styled-components";
 import winnerBG from "./images/winner.png";
 
-const WinnerModal = ({ winner, players, handleBackToLobby }) => {
+const WinnerModal = ({
+  winner,
+  players,
+  handleBackToLobby,
+  stopBattleSound,
+}) => {
   let winnerColor;
   if (Object.keys(winner).length !== 0) {
+    stopBattleSound();
     if (winner.color === players[0].color) {
       winnerColor = "red";
     } else {

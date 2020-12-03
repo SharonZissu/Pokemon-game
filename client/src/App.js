@@ -10,12 +10,14 @@ import { GlobalStyle } from "./styles/globalStyle";
 import JoinGame from "./Pages/JoinGame";
 import { AudioContext } from "./audio-context";
 import Modal from "./Modal";
+import Rules from "./Pages/Rules";
 // import ReactAudioPlayer from "react-audio-player";
 
 const PAGE_GAME = "Game";
 const PAGE_LOBBY = "Lobby";
 const PAGE_CREATE_NEW_GAME = "CreateNewGame";
 const PAGE_JOIN_GAME = "JoinGame";
+const PAGE_RULES = "Rules";
 
 function App() {
   const [page, setPage] = useState("Lobby");
@@ -162,7 +164,7 @@ function App() {
         setDirection("");
       } else if (result === "winner") {
         setWinner(attacker);
-        setIsGameFinished(true);
+        // setIsGameFinished(true);
         console.log("settinggggggggggggggggggggggggggg flagalglgl");
         console.log("ATTACKERRR", attacker);
         console.log(game.players);
@@ -184,6 +186,8 @@ function App() {
       setColor("");
       setPage(PAGE_LOBBY);
       openLeaveModal(true);
+      setWinner({});
+      console.log("logging from end-game");
       // setShowModal(true);
       // setModalText('Your opponent has left the game');
       // setModalTitle('Game Over');
@@ -222,6 +226,8 @@ function App() {
   const leaveGame = () => {
     setGame(PAGE_LOBBY);
     setGameStartAfterFlagsAndTraps(false);
+    setWinner({});
+
     socket.emit("leave-game");
   };
 
@@ -404,6 +410,8 @@ function App() {
           winner={winner}
         />
       )}
+      {page === PAGE_RULES && <Rules setPage={setPage} />}
+
       <GlobalStyle />
     </Container>
   );
