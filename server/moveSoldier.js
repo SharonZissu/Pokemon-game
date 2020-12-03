@@ -30,8 +30,29 @@ module.exports = ({ game, attackSoldier, cellToAttack, type }) => {
     };
     return "empty";
   } else if (Dw === "flag") {
+    game.board[Ai] = {
+      //make the attacker cell empty
+      weapon: null,
+      player: null,
+      color: "grey",
+    };
+    game.board[Di] = {
+      ...game.board[Di],
+      exposed: true,
+    };
     return "winner";
   } else if (Dw === "trap") {
+    game.board[Ai] = {
+      //make the attacker cell empty
+      weapon: null,
+      player: null,
+      color: "grey",
+    };
+    game.board[Di] = {
+      ...game.board[Di],
+      exposed: true,
+    };
+
     return "trap";
   } else if (
     //check if the attacker wins the defender

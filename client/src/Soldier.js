@@ -166,6 +166,8 @@ const Soldier = ({
         if (weapon === "rock") img = `charmander-${playerColor}-e`;
         if (weapon === "paper") img = `squirtle-${playerColor}-e`;
         if (weapon === "scissors") img = `balbazor-${playerColor}-e`;
+        if (weapon === "trap") img = "hole";
+        if (weapon === "flag") img = `${playerColor}-flag`;
       } else if (exposed && playerColor !== cellColor) {
         if (weapon === "rock")
           img = `charmander-${playerColor === "red" ? "blue" : "red"}-e`;
@@ -173,6 +175,9 @@ const Soldier = ({
           img = `squirtle-${playerColor === "red" ? "blue" : "red"}-e`;
         if (weapon === "scissors")
           img = `balbazor-${playerColor === "red" ? "blue" : "red"}-e`;
+        if (weapon === "trap") img = "hole";
+        if (weapon === "flag")
+          img = `${playerColor === "red" ? "blue" : "red"}-flag`;
       }
     }
   };
@@ -287,7 +292,7 @@ const Soldier = ({
           src={require(`./images/${img}.png`).default}
           alt="cell logo"
           flag={flag}
-          color={cellColor === playerColor}
+          color={cellColor === playerColor || exposed}
           type={weapon}
           movingSoldierTo={movingSoldierTo}
           animate={cellToMoveIndex ? cellToMoveIndex === index : false}

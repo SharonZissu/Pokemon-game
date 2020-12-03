@@ -10,6 +10,7 @@ const Modal = ({
   closeJoinModal,
   closeLeaveModal,
   handleChangeName,
+  nameIsEmpty,
 }) => {
   return (
     <>
@@ -23,6 +24,7 @@ const Modal = ({
             type="text"
             placeholder="Enter nickname..."
             onChange={handleChangeName}
+            nameIsEmpty={nameIsEmpty}
           />
           {/* joinGame(game.id) */}
           <Button onClick={joinGameHandler}>Let's Play!</Button>
@@ -66,7 +68,7 @@ const JoinContainer = styled.div`
 const Input = styled.input`
   font-size: 2rem;
   padding: 1rem;
-  border: none;
+  border: ${({ nameIsEmpty }) => (nameIsEmpty ? "1px solid red" : " none")};
   width: 80%;
   &:focus {
     outline: none;
@@ -82,6 +84,11 @@ const Button = styled.button`
   text-transform: uppercase;
   padding: 1rem 2rem;
   width: 80%;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
 `;
 
 const LeaveContainer = styled.div`

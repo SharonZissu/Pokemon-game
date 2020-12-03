@@ -9,8 +9,10 @@ import Message from "../Message";
 import { AudioContext } from "../audio-context";
 import WarModal from "../WarModal";
 import WarDrawModal from "../WarDrawModal";
-import WaitingBg from "../images/pokador-waiting.png";
+import WaitingBg from "../images/waitinig-bg.png";
 import VoulmeIcons from "../VoulmeIcons";
+import GameSpinner from "../GameSpinner";
+import WinnerModal from "../WinnerModal";
 // import battleSound from "../sounds/battle-sound.mp3";
 const Game = ({
   game,
@@ -39,6 +41,7 @@ const Game = ({
   isChooseWeapon,
   openLeaveModal,
   setPage,
+  winner,
 }) => {
   // console.log(game);
 
@@ -62,6 +65,7 @@ const Game = ({
       // battleAudio.pause();
       // battleAudio.currentTime = 0;
       stopBattleSound();
+
       leaveGame();
       console.log(backToLobbyClicked);
       // openLeaveModal();
@@ -179,7 +183,6 @@ const Game = ({
 
   const renderBoard = () => (
     <BoardContainer>
-      <VoulmeIcons type="game" />
       <RedPlayerName>{players[0].name}</RedPlayerName>
 
       <Place hide={flag && trap && gameStartAfterFlagsAndTraps}>
@@ -194,7 +197,12 @@ const Game = ({
         </>
       </Place>
 
-      <Board war={war} warDraw={warDraw}>
+      <Board
+        war={war}
+        warDraw={warDraw}
+        turn={game.turn}
+        showOutline={gameStartAfterFlagsAndTraps && !war && !warDraw}
+      >
         {game.board.map((cell, i) => (
           <Soldier
             key={i}
@@ -254,15 +262,36 @@ const Game = ({
       <BackToLobbyBtn onClick={handleBackToLobby}>
         Back To Lobby &rarr;
       </BackToLobbyBtn>
-      <PokadorImg src={WaitingBg} />
+      {/* <PokadorImg src={WaitingBg} /> */}
+      {/* <PickachuBG src={WaitingBg} /> */}
       <SpinnerContainerWaiting>
-        <Spinner size="big" color="white" />
+        <Spinner />
       </SpinnerContainerWaiting>
 
       <WaitingTextBeforeStart turn={game.turn}>
         Waiting for opponent..
       </WaitingTextBeforeStart>
     </Waiting>
+  );
+
+  const rednerSettings = () => (
+    <SettingsContainer>
+      <SoundContainer>
+        <VoulmeIcons type="game" />
+      </SoundContainer>
+      <GameSpinnerContainer>
+        {game.turn !== color &&
+          !war &&
+          !warDraw &&
+          gameStartAfterFlagsAndTraps && (
+            <>
+              <GameSpinner />
+              <WaitingText2>Waiting for opponent</WaitingText2>
+            </>
+          )}
+      </GameSpinnerContainer>
+      <LeaveGameBtn onClick={handleBackToLobby}>Leave Game</LeaveGameBtn>
+    </SettingsContainer>
   );
 
   const renderChat = () => (
@@ -303,12 +332,18 @@ const Game = ({
         />
       </RefereeContainer>
       {renderBoard()}
+      {rednerSettings()}
       {renderChat()}
     </>
   );
 
   const renderGameStart = () => (
     <>
+      <WinnerModal
+        winner={winner}
+        players={players}
+        handleBackToLobby={handleBackToLobby}
+      />
       <RefereeContainer>
         {!war && !warDraw ? (
           <>
@@ -340,7 +375,7 @@ const Game = ({
         )}
       </RefereeContainer>
       {renderBoard()}
-      {game.turn !== color && !war && !warDraw && (
+      {/* {game.turn !== color && !war && !warDraw && (
         <SpinnerContainer turn={game.turn}>
           <Spinner />
           <WaitingText turn={game.turn}>
@@ -350,7 +385,8 @@ const Game = ({
             <br />
           </WaitingText>
         </SpinnerContainer>
-      )}
+      )} */}
+      {rednerSettings()}
       {renderChat()}
     </>
   );
@@ -407,7 +443,7 @@ const warAnimation = keyframes`
 `;
 const Container = styled.div`
   width: 100%;
-  min-height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
@@ -419,6 +455,7 @@ const WaitingTextBeforeStart = styled.h1`
   font-size: 3rem;
   position: absolute;
   bottom: 8rem;
+  top: 3%;
   left: 50%;
   width: 95%;
   border-radius: 3rem;
@@ -432,9 +469,14 @@ const WaitingTextBeforeStart = styled.h1`
   /* margin-bottom: 6rem; */
 `;
 
-const PokadorImg = styled.img`
+// const PokadorImg = styled.img`
+//   width: 100%;
+//   /* height: 200vh; */
+// `;
+
+const PickachuBG = styled.img`
   width: 100%;
-  /* height: 200vh; */
+  height: 100%;
 `;
 
 ////////////////GAME WAITING
@@ -450,7 +492,7 @@ const SpinnerContainer = styled.div`
 
 const SpinnerContainerWaiting = styled.div`
   position: absolute;
-  top: 48%;
+  top: 17%;
   left: 50%;
   transform: translate(-50%, -50%);
 `;
@@ -473,6 +515,8 @@ const Waiting = styled.div`
   color: white;
   /* justify-content: flex-end; */
   padding-bottom: 13rem;
+  background-image: url(${WaitingBg});
+  background-size: cover;
   /* opacity: 0.7; */
   /* background-image: url(${WaitingBg});
   background-size: cover;
@@ -491,7 +535,7 @@ const BackToLobbyBtn = styled.button`
   font-size: 2rem;
   border: none;
   position: absolute;
-  top: 5%;
+  bottom: 5%;
   left: 50%;
   transform: translateX(-50%);
 `;
@@ -574,26 +618,115 @@ const RightFlagImg = styled(Flag)`
 const BoardContainer = styled.div`
   width: 100vw;
 
-  height: 70vh;
+  height: 65vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #a5ce21;
   position: relative;
-  @media (min-height: 668px) {
-    height: 60vh;
+  @media (min-width: 376px) {
+    height: 65vh;
   }
+`;
+
+const redBorderAnimation = keyframes`
+0% {
+  border: 0.2rem solid #e8f4c0;
+  -webkit-border: 0.2rem solid #e8f4c0;
+  outline: 0.4rem solid #e8f4c0;
+  -webkit-outline: 0.4rem solid #e8f4c0;
+  outline-offset: 0.3rem;
+  -webkit-outline-offset: 0.3rem;
+
+}
+
+50% {
+  outline: 0.4rem solid red;
+  -webkit-outline: 0.4rem solid red;
+  border: 0.2rem solid red;
+  -webkit-border: 0.2rem solid red;
+
+  /* outline-offset: 1rem; */
+  outline-offset: 0.3rem;
+  -webkit-outline-offset: 0.3rem;
+
+}
+
+100% {
+  /* border: 0.2rem solid red; */
+  border: 0.2rem solid #e8f4c0;
+  -webkit-border: 0.2rem solid #e8f4c0;
+
+  outline: 0.4rem solid #e8f4c0;
+  -webkit-outline: 0.4rem solid #e8f4c0;
+  /* outline-offset: 1rem; */
+  outline-offset: 0.3rem;
+  -webkit-outline-offset: 0.3rem;
+
+}
+`;
+
+const blueBorderAnimation = keyframes`
+0% {
+  border: 0.2rem solid #e8f4c0;
+  -webkit-border: 0.2rem solid #e8f4c0;
+  outline: 0.4rem solid #e8f4c0;
+  -webkit-outline: 0.4rem solid #e8f4c0;
+  /* outline-offset: 1rem; */
+  outline-offset: 0.3rem;
+  -webkit-outline-offset: 0.3rem;
+
+}
+
+50% {
+  border: 0.2rem solid #a236d2;
+  -webkit-border: 0.2rem solid #a236d2;
+  outline: 0.4rem solid #a236d2;
+  -webkit-outline: 0.4rem solid #a236d2;
+  /* outline-offset: 1rem; */
+  outline-offset: 0.3rem;
+  -webkit-outline-offset: 0.3rem;
+
+
+}
+100% {
+  border: 0.2rem solid #e8f4c0;
+  -webkit-border: 0.2rem solid #e8f4c0;
+
+  outline: 0.4rem solid #e8f4c0;
+  -webkit-outline: 0.4rem solid #e8f4c0;
+  /* outline-offset: 1rem; */
+  outline-offset: 0.3rem;
+  -webkit-outline-offset: 0.3rem;
+
+}
 `;
 
 const Board = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 85%;
-  height: 65%;
+  height: 70%;
   line-height: 0;
   position: relative;
+  ${({ turn, showOutline }) => {
+    if (showOutline) {
+      if (turn === "red") {
+        return css`
+          animation: ${redBorderAnimation} 1.4s ease-in infinite;
+        `;
+      } else {
+        return css`
+          animation: ${blueBorderAnimation} 1.4s ease-in infinite;
+        `;
+      }
+    }
+  }}
   border: 0.2rem solid #e8f4c0;
+  /* @media (min-width: 376px) {
+    height: 75%;
+  } */
   &::after {
     content: "";
     position: absolute;
@@ -677,11 +810,62 @@ const PlayerName = styled.h1``;
 const RedPlayerName = styled(PlayerName)`
   color: red;
   margin-bottom: 1rem;
+  align-self: flex-start;
+  margin-left: 3rem;
 `;
 
 const BluePlayerName = styled(PlayerName)`
   color: #a236d2;
   margin-top: 1rem;
+  align-self: flex-end;
+  margin-right: 3rem;
+`;
+
+//////////SETTINGS
+const SettingsContainer = styled.div`
+  height: 5vh;
+  position: relative;
+  /* border: 1px solid black; */
+  padding: 3rem 0;
+  background-color: #c6de83;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const SoundContainer = styled.div`
+  display: flex;
+  margin-left: 1rem;
+`;
+
+const GameSpinnerContainer = styled.div`
+  /* margin-right: 20%; */
+  display: flex;
+  flex-direction: column;
+  margin-top: -13%;
+  margin-left: 2rem;
+  position: relative;
+`;
+
+const LeaveGameBtn = styled.button`
+  padding: 0.5rem 1rem;
+  /* height: 3rem; */
+  background-color: transparent;
+  text-transform: uppercase;
+  border: 2px solid white;
+  font-size: 1.3rem;
+  margin-right: 1rem;
+`;
+
+const WaitingText2 = styled.h2`
+  /* position: absolute; */
+  /* left: 100%; */
+  /* top: 80%; */
+  /* transform: translate(-50%, -50%); */
+  opacity: 0.5;
+  width: 15rem;
+  font-size: 1rem;
+  text-align: center;
 `;
 
 //////////CHAT
@@ -690,6 +874,7 @@ const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  /* height: 25vh; */
   align-items: center;
   padding-top: 0.6rem;
   padding-bottom: 0.6rem;

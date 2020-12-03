@@ -42,6 +42,8 @@ function App() {
   const [defenderBeforeWar, setDefenderBeforeWar] = useState({});
   const [isChooseWeapon, setIsChooseWeapon] = useState(false);
   const [leaveModal, setLeaveModal] = useState(false);
+  const [winner, setWinner] = useState({});
+  const [isGameFinished, setIsGameFinished] = useState(false);
 
   const {
     playSound,
@@ -115,7 +117,12 @@ function App() {
       // console.log("attacker from move-soldier", attacker);
       // console.log("defender from move-soldier", defender);
       // setAttackerIndex(attacker.index);
-      if (result !== "empty" && result !== "draw") {
+      if (
+        result !== "empty" &&
+        result !== "draw" &&
+        result !== "trap" &&
+        result !== "winner"
+      ) {
         // console.log("YESSSSSSSSSSSSSSSSSSSSSSSSSSSS");
         console.log(
           '"move-soldier-result:" setWar to true and setWarDraw to false'
@@ -153,8 +160,15 @@ function App() {
         setAttackerBeforeWar(attacker);
         setDefenderBeforeWar(defender);
         setDirection("");
-      } else if (result === "flag") {
+      } else if (result === "winner") {
+        setWinner(attacker);
+        setIsGameFinished(true);
+        console.log("settinggggggggggggggggggggggggggg flagalglgl");
+        console.log("ATTACKERRR", attacker);
+        console.log(game.players);
+        return;
       } else if (result === "trap") {
+        return;
       } else {
         checkDirection(attacker.index, defender.index);
         setWarDraw(false);
@@ -207,6 +221,7 @@ function App() {
 
   const leaveGame = () => {
     setGame(PAGE_LOBBY);
+    setGameStartAfterFlagsAndTraps(false);
     socket.emit("leave-game");
   };
 
@@ -221,6 +236,7 @@ function App() {
   const handleAttack = (soldier) => {
     // console.log("HANDLE ATTACK");
     // console.log(soldier);
+    console.log("SOLDIERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", soldier);
     setAttackSoldier(soldier);
   };
 
@@ -385,6 +401,7 @@ function App() {
           isChooseWeapon={isChooseWeapon}
           openLeaveModal={openLeaveModal}
           setPage={setPage}
+          winner={winner}
         />
       )}
       <GlobalStyle />

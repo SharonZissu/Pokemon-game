@@ -14,7 +14,7 @@ export const GlobalStyle = createGlobalStyle`
 html {
   box-sizing: border-box;
   font-size: 62.5%; //1rem = 10px
-  min-height: 100vh;
+  max-height: 100vh;
   
 }
 

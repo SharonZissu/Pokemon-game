@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Footer from "../Footer";
 import styled from "styled-components";
 import joinImg from "../images/joinGame-img.png";
@@ -11,6 +11,13 @@ const JoinGame = ({ games, joinGame, setPage }) => {
   const [showModal, setShowModal] = useState(false);
   const [gameId, setGameId] = useState(false);
   const [name, setName] = useState("");
+  const [nameIsEmpty, setNameIsEmpty] = useState(false);
+
+  useEffect(() => {
+    if (name !== "") {
+      setNameIsEmpty(false);
+    }
+  }, [name]);
   const handleChangeName = (e) => {
     setName(e.target.value);
   };
@@ -22,6 +29,10 @@ const JoinGame = ({ games, joinGame, setPage }) => {
   };
 
   const joinGameHandler = () => {
+    if (name === "") {
+      setNameIsEmpty(true);
+      return;
+    }
     joinGame(gameId, name);
   };
 
@@ -37,6 +48,7 @@ const JoinGame = ({ games, joinGame, setPage }) => {
           joinGameHandler={joinGameHandler}
           closeJoinModal={closeJoinModal}
           handleChangeName={handleChangeName}
+          nameIsEmpty={nameIsEmpty}
         />
         <Img src={joinImg} alt="join game img" />
         <TableContainer>

@@ -28,8 +28,8 @@ const Loader = styled.div`
   border-radius: 50%;
 
   text-indent: -9999em;
-  width: ${({ styledSpinner }) => (styledSpinner ? "42rem" : "10rem")};
-  height: ${({ styledSpinner }) => (styledSpinner ? "42rem" : "10rem")};
+  width: ${({ styledSpinner }) => (styledSpinner ? "10rem" : "10rem")};
+  height: ${({ styledSpinner }) => (styledSpinner ? "10rem" : "10rem")};
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);

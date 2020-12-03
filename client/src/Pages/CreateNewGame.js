@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import createGameImg from "../images/createGameImg.jpg";
 import Footer from "../Footer";
 import VoulmeIcons from "../VoulmeIcons";
@@ -7,6 +7,33 @@ import styled from "styled-components";
 const CreateNewGame = ({ createGame, setPage }) => {
   const [gameName, setGameName] = useState("");
   const [playerName, setPlayerName] = useState("");
+  const [playerNameEmpty, setPlayerNameEmpty] = useState(false);
+  const [gameNameEmpty, setGameNameEmpty] = useState(false);
+
+  useEffect(() => {
+    if (playerName !== "") {
+      setPlayerNameEmpty(false);
+    }
+    if (gameName !== "") {
+      setGameNameEmpty(false);
+    }
+  }, [playerName, gameName]);
+
+  const createGameHandler = () => {
+    if (playerName === "" && gameName === "") {
+      setPlayerNameEmpty(true);
+      setGameNameEmpty(true);
+      return;
+    } else if (gameName === "" && playerName !== "") {
+      setGameNameEmpty(true);
+      return;
+    } else if (gameName !== "" && playerName === "") {
+      setPlayerNameEmpty(true);
+      return;
+    }
+
+    createGame(gameName, playerName);
+  };
 
   return (
     <Container>
@@ -18,6 +45,7 @@ const CreateNewGame = ({ createGame, setPage }) => {
             type="text"
             placeholder="Nickname"
             onChange={(e) => setPlayerName(e.target.value)}
+            playerNameEmpty={playerNameEmpty}
           />
           <Label for="nickname" class="form__label">
             Nickname
@@ -28,6 +56,7 @@ const CreateNewGame = ({ createGame, setPage }) => {
             type="text"
             onChange={(e) => setGameName(e.target.value)}
             placeholder="Game name"
+            gameNameEmpty={gameNameEmpty}
           />
           <Label for="game-name" class="form__label">
             Game name
@@ -35,7 +64,7 @@ const CreateNewGame = ({ createGame, setPage }) => {
         </InputContainer>
       </NewGame>
       <Buttons>
-        <CreateNewGameBtn onClick={() => createGame(gameName, playerName)}>
+        <CreateNewGameBtn onClick={createGameHandler}>
           Create New Game
         </CreateNewGameBtn>
 
@@ -89,6 +118,10 @@ const Button = styled.button`
 
 const CreateNewGameBtn = styled(Button)`
   background-color: #c6de83;
+  &:focus,
+  &:active {
+    outline: none;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -100,10 +133,15 @@ const Input = styled.input`
   font-size: 1.5rem;
 
   padding: 1.5rem 2rem;
+  border: ${({ playerNameEmpty, gameNameEmpty }) =>
+    playerNameEmpty || gameNameEmpty ? "1px solid red" : "none"};
 
   width: 100%;
-  border: none;
-  border-bottom: 0.3rem solid transparent;
+  border-bottom: ${({ playerNameEmpty, gameNameEmpty }) =>
+    playerNameEmpty || gameNameEmpty
+      ? "1px solid red"
+      : "0.3rem solid transparent"};
+  /* border-bottom: 0.3rem solid transparent; */
   color: #999;
 
   transition: all 0.3s;

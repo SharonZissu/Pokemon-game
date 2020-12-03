@@ -157,7 +157,7 @@ const Container = styled.div`
   /* opacity: ${({ show }) => (show ? "1" : "0")};
   visibility: ${({ show }) => (show ? "visible" : "hidden")}; */
   width: 85%;
-  height: 65%;
+  height: 75%;
   display: flex;
   flex-direction: column;
   background-color: #c6de83;

@@ -33,7 +33,7 @@ const Text = styled.div`
 `;
 
 const Mes = styled.p`
-  color: ${({ color }) => color};
+  color: ${({ color }) => (color === "blue" ? "#a236d2" : "red")};
   font-size: 1.5rem;
   background-color: #c6de83;
   padding: 0.4rem 1rem;

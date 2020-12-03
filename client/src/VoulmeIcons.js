@@ -31,16 +31,18 @@ const VoulmeIcons = ({ type }) => {
 export default VoulmeIcons;
 
 const VolumeOffContainer = styled.div`
-  position: absolute;
   ${({ type }) =>
     type
       ? css`
-          bottom: 0.2rem;
-          left: 3.2rem;
-          width: 3rem;
-          height: 3rem;
+          /* top: 50%;
+          left: 4rem;
+          transform: translateY(-50%); */
+          width: 2.5rem;
+          height: 2.5rem;
         `
       : css`
+          position: absolute;
+
           top: 0;
           right: 0.2rem;
           width: 5rem;
@@ -48,18 +50,20 @@ const VolumeOffContainer = styled.div`
         `}
 `;
 const VolumeOnContainer = styled.div`
-  position: absolute;
   ${({ type }) =>
     type
       ? css`
-          bottom: 0.2rem;
-          left: 0.2rem;
-          width: 3rem;
-          height: 3rem;
+          /* top: 50%;
+          left: 1rem;
+          transform: translateY(-50%); */
+          width: 2.5rem;
+          height: 2.5rem;
         `
       : css`
           top: 0;
           left: 0.2rem;
+          position: absolute;
+
           width: 5rem;
           height: 5rem;
         `}
