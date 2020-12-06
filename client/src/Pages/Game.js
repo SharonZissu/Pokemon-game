@@ -42,6 +42,7 @@ const Game = ({
   openLeaveModal,
   setPage,
   winner,
+  warDrawHelpForDesign,
 }) => {
   // console.log(game);
 
@@ -232,6 +233,7 @@ const Game = ({
             warDraw={warDraw}
             attackerBeforeWar={attackerBeforeWar}
             defenderBeforeWar={defenderBeforeWar}
+            warDrawHelpForDesign={warDrawHelpForDesign}
           />
         ))}
       </Board>

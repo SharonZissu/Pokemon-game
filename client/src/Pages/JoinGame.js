@@ -7,7 +7,13 @@ import joinImg from "../images/joinGame-img.png";
 import Modal from "../Modal";
 import VoulmeIcons from "../VoulmeIcons";
 
-const JoinGame = ({ games, joinGame, setPage }) => {
+const JoinGame = ({
+  games,
+  joinGame,
+  setPage,
+  gameIsFullMsg,
+  setGameIsFullMsg,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [gameId, setGameId] = useState(false);
   const [name, setName] = useState("");
@@ -36,7 +42,10 @@ const JoinGame = ({ games, joinGame, setPage }) => {
     joinGame(gameId, name);
   };
 
-  const closeJoinModal = () => setShowModal(false);
+  const closeJoinModal = () => {
+    setShowModal(false);
+    setGameIsFullMsg(false);
+  };
   return (
     <>
       <Container>
@@ -49,6 +58,7 @@ const JoinGame = ({ games, joinGame, setPage }) => {
           closeJoinModal={closeJoinModal}
           handleChangeName={handleChangeName}
           nameIsEmpty={nameIsEmpty}
+          gameIsFullMsg={gameIsFullMsg}
         />
         <Img src={joinImg} alt="join game img" />
         <TableContainer>

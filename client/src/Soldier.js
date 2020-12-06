@@ -31,6 +31,7 @@ const Soldier = ({
   warDraw,
   attackerBeforeWar,
   defenderBeforeWar,
+  warDrawHelpForDesign,
 }) => {
   useEffect(() => {
     // setAttackerIndex(null);
@@ -101,13 +102,23 @@ const Soldier = ({
   let img;
 
   const checkSoldier = () => {
+    // if (
+    //   Object.keys(attackerBeforeWar).length !== 0 &&
+    //   Object.keys(defenderBeforeWar).length !== 0 &&
+    //   warDraw
+    // ) {
+    //   if (attackerBeforeWar.index === index) {
+    //     img = `pokeball-${attackerBeforeWar.color}`;
+    //   }
+    //   if (defenderBeforeWar.index === index) {
+    //     img = `pokeball-${defenderBeforeWar.color}`;
+    //   }
+    //   return;
+    // }
     if (
-      (Object.keys(attackerBeforeWar).length !== 0 &&
-        Object.keys(defenderBeforeWar).length !== 0 &&
-        war) ||
-      (Object.keys(attackerBeforeWar).length !== 0 &&
-        Object.keys(defenderBeforeWar).length !== 0 &&
-        warDraw)
+      Object.keys(attackerBeforeWar).length !== 0 &&
+      Object.keys(defenderBeforeWar).length !== 0 &&
+      warDrawHelpForDesign
     ) {
       if (attackerBeforeWar.index === index) {
         img = `pokeball-${attackerBeforeWar.color}`;
@@ -115,6 +126,124 @@ const Soldier = ({
       if (defenderBeforeWar.index === index) {
         img = `pokeball-${defenderBeforeWar.color}`;
       }
+      return;
+    }
+
+    // (Object.keys(attackerBeforeWar).length !== 0 &&
+    // Object.keys(defenderBeforeWar).length !== 0 &&
+    // warDraw)
+    if (
+      Object.keys(attackerBeforeWar).length !== 0 &&
+      Object.keys(defenderBeforeWar).length !== 0 &&
+      war &&
+      !warDrawHelpForDesign
+    ) {
+      if (attackerBeforeWar.index === index) {
+        if (
+          attackerBeforeWar.color === playerColor &&
+          !attackerBeforeWar.exposed
+        ) {
+          if (attackerBeforeWar.weapon === "rock")
+            img = `charmander-${playerColor}`;
+          else if (attackerBeforeWar.weapon === "paper")
+            img = `squirtle-${playerColor}`;
+          else if (attackerBeforeWar.weapon === "scissors")
+            img = `balbazor-${playerColor}`;
+          else if (attackerBeforeWar.weapon === "flag")
+            img = `${playerColor}-flag`;
+          else if (attackerBeforeWar.weapon === "trap") img = `hole`;
+          else if (!attackerBeforeWar.weapon) img = `pokeball-${playerColor}`;
+        } else if (
+          attackerBeforeWar.color === playerColor &&
+          attackerBeforeWar.exposed
+        ) {
+          if (attackerBeforeWar.weapon === "rock")
+            img = `charmander-${playerColor}-e`;
+          else if (attackerBeforeWar.weapon === "paper")
+            img = `squirtle-${playerColor}-e`;
+          else if (attackerBeforeWar.weapon === "scissors")
+            img = `balbazor-${playerColor}-e`;
+          else if (attackerBeforeWar.weapon === "flag")
+            img = `${playerColor}-flag`;
+          else if (attackerBeforeWar.weapon === "trap") img = `hole`;
+          else if (!attackerBeforeWar.weapon) img = `pokeball-${playerColor}`;
+        } else if (
+          attackerBeforeWar.color !== playerColor &&
+          attackerBeforeWar.exposed
+        ) {
+          if (attackerBeforeWar.weapon === "rock")
+            img = `charmander-${attackerBeforeWar.color}-e`;
+          else if (attackerBeforeWar.weapon === "paper")
+            img = `squirtle-${attackerBeforeWar.color}-e`;
+          else if (attackerBeforeWar.weapon === "scissors")
+            img = `balbazor-${attackerBeforeWar.color}-e`;
+          else if (attackerBeforeWar.weapon === "flag")
+            img = `${attackerBeforeWar.color}-flag`;
+          else if (attackerBeforeWar.weapon === "trap") img = `hole`;
+          else if (!attackerBeforeWar.weapon)
+            img = `pokeball-${attackerBeforeWar.color}`;
+        } else if (
+          attackerBeforeWar.color !== playerColor &&
+          !attackerBeforeWar.exposed
+        ) {
+          img = `pokeball-${attackerBeforeWar.color}`;
+        }
+      }
+      if (defenderBeforeWar.index === index) {
+        if (
+          defenderBeforeWar.color === playerColor &&
+          !defenderBeforeWar.exposed
+        ) {
+          if (defenderBeforeWar.weapon === "rock")
+            img = `charmander-${playerColor}`;
+          else if (defenderBeforeWar.weapon === "paper")
+            img = `squirtle-${playerColor}`;
+          else if (defenderBeforeWar.weapon === "scissors")
+            img = `balbazor-${playerColor}`;
+          else if (defenderBeforeWar.weapon === "flag")
+            img = `${playerColor}-flag`;
+          else if (defenderBeforeWar.weapon === "trap") img = `hole`;
+          else if (!defenderBeforeWar.weapon) img = `pokeball-${playerColor}`;
+        } else if (
+          defenderBeforeWar.color === playerColor &&
+          defenderBeforeWar.exposed
+        ) {
+          if (defenderBeforeWar.weapon === "rock")
+            img = `charmander-${playerColor}-e`;
+          else if (defenderBeforeWar.weapon === "paper")
+            img = `squirtle-${playerColor}-e`;
+          else if (defenderBeforeWar.weapon === "scissors")
+            img = `balbazor-${playerColor}-e`;
+          else if (defenderBeforeWar.weapon === "flag")
+            img = `${playerColor}-flag`;
+          else if (defenderBeforeWar.weapon === "trap") img = `hole`;
+          else if (!defenderBeforeWar.weapon) img = `pokeball-${playerColor}`;
+        } else if (
+          defenderBeforeWar.color !== playerColor &&
+          defenderBeforeWar.exposed
+        ) {
+          if (defenderBeforeWar.weapon === "rock")
+            img = `charmander-${defenderBeforeWar.color}-e`;
+          else if (defenderBeforeWar.weapon === "paper")
+            img = `squirtle-${defenderBeforeWar.color}-e`;
+          else if (defenderBeforeWar.weapon === "scissors")
+            img = `balbazor-${defenderBeforeWar.color}-e`;
+          else if (defenderBeforeWar.weapon === "flag")
+            img = `${defenderBeforeWar.color}-flag`;
+          else if (defenderBeforeWar.weapon === "trap") img = `hole`;
+          else if (!defenderBeforeWar.weapon)
+            img = `pokeball-${defenderBeforeWar.color}`;
+        } else if (
+          defenderBeforeWar.color !== playerColor &&
+          !defenderBeforeWar.exposed
+        ) {
+          img = `pokeball-${defenderBeforeWar.color}`;
+        }
+      }
+
+      // if (defenderBeforeWar.index === index) {
+      //   img = `pokeball-${defenderBeforeWar.color}`;
+      // }
       // if (
       //   (attackerBeforeWar.index === index) &&
       //   (playerColor !== attackerBeforeWar.color)

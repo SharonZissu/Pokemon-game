@@ -39,6 +39,7 @@ function App() {
   const [showOnSoundIcon, setShowOnSoundIcon] = useState(false);
   const [war, setWar] = useState(false);
   const [warDraw, setWarDraw] = useState(false);
+  const [warDrawHelpForDesign, setWarDrawHelpForDesign] = useState(false);
   const [warResult, setWarResult] = useState("");
   const [attackerBeforeWar, setAttackerBeforeWar] = useState({});
   const [defenderBeforeWar, setDefenderBeforeWar] = useState({});
@@ -46,6 +47,7 @@ function App() {
   const [leaveModal, setLeaveModal] = useState(false);
   const [winner, setWinner] = useState({});
   const [isGameFinished, setIsGameFinished] = useState(false);
+  const [gameIsFullMsg, setGameIsFullMsg] = useState(false);
 
   const {
     playSound,
@@ -61,6 +63,14 @@ function App() {
 
   useEffect(() => {
     const game = games.find((g) => g.id === gameId);
+    console.log("GAME");
+    console.log("GAME");
+    console.log("GAME");
+    console.log("GAME", game);
+    console.log("GAME");
+    console.log("GAME");
+    console.log("GAME");
+
     if (!game) {
       // console.log("GAME NOT FOUND FROM USEEEFECT");
 
@@ -82,6 +92,13 @@ function App() {
 
   useEffect(() => {
     socket.on("disconnect", () => {
+      console.log("IN DISCONNECT");
+      console.log("IN DISCONNECT");
+      console.log("IN DISCONNECT");
+      console.log("IN DISCONNECT");
+      console.log("IN DISCONNECT");
+      console.log("IN DISCONNECT");
+      console.log("IN DISCONNECT");
       // console.log("socket.on(disconnect)");
       setGameId(null);
       setColor("");
@@ -101,6 +118,7 @@ function App() {
       // console.log("socket.on(your-game-created)");
 
       // console.log(gameId);
+      console.log("Game Id", gameId);
       setGameId(gameId);
     });
 
@@ -109,6 +127,7 @@ function App() {
       // console.log(color);
 
       setColor(color);
+      setPage(PAGE_GAME);
     });
 
     socket.on("game-start", () => {
@@ -151,6 +170,9 @@ function App() {
         // console.log("inside IFFIFIFIFIFIF");
         // console.log(result);
         setWarDraw(true);
+        setTimeout(() => {
+          setWarDrawHelpForDesign(true);
+        }, 5000);
         setWar(false);
 
         console.log(
@@ -175,12 +197,24 @@ function App() {
         checkDirection(attacker.index, defender.index);
         setWarDraw(false);
         setWar(false);
+        // setWarDrawHelpForDesign(false);
       }
 
       // setWarDetails({ result, attacker, defender });
       // setShowModal(true);
     });
 
+    socket.on("winner", (winner) => {
+      console.log("WINNER");
+      console.log("WINNER");
+      console.log("WINNER");
+      console.log("WINNER");
+      console.log("WINNER");
+      console.log("WINNER");
+      console.log("WINNER");
+      console.log("WINNER");
+      setWinner(winner);
+    });
     socket.on("end-game", () => {
       setGameId(null);
       setColor("");
@@ -193,8 +227,23 @@ function App() {
       // setModalTitle('Game Over');
     });
 
-    socket.on("choises-after-draw", ({ warArr, turn }) => {
-      // console.log("WarArr:", warArr);
+    socket.on("choises-after-draw", ({ warArr, turn, gameId }) => {
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
+      console.log("WarArr:", warArr);
       // console.log("Turn:", turn);
       const red = warArr.find((item) => item.color === "red");
       red.player.weapon = red.weapon;
@@ -205,9 +254,9 @@ function App() {
       // console.log("BLUE", blue);
       // console.log("GAMEEEEEEEEEEEEEE", game);
       if (turn === "red") {
-        moveSoldierAfterDraw(blue.player, red.player);
+        moveSoldierAfterDraw(blue.player, red.player, gameId);
       } else {
-        moveSoldierAfterDraw(red.player, blue.player);
+        moveSoldierAfterDraw(red.player, blue.player, gameId);
       }
     });
   }, []);
@@ -218,13 +267,26 @@ function App() {
   };
 
   const joinGame = (gameId, playerName) => {
-    socket.emit("join-game", { gameId, playerName });
-    setPage(PAGE_GAME);
-    setGameId(gameId);
+    const game = games.find((g) => g.id === gameId);
+    console.log("GAME", game);
+    if (game.newPlayers.length > 2) {
+      alert("Error");
+      return;
+    }
+    socket.emit("join-game", { gameId, playerName }, (msg) => {
+      if (!msg) {
+        setGameId(gameId);
+      } else {
+        setGameIsFullMsg(true);
+      }
+    });
   };
 
   const leaveGame = () => {
-    setGame(PAGE_LOBBY);
+    // setGame(PAGE_LOBBY);
+    setPage(PAGE_LOBBY);
+    setGame({});
+    setGameId(null);
     setGameStartAfterFlagsAndTraps(false);
     setWinner({});
 
@@ -262,13 +324,25 @@ function App() {
     }
     console.log('"moveSoldier:" setWar and setWarDraw to false');
     setWar(false);
+    // setWarDrawHelpForDesign(false);
     setWarDraw(false);
     setWarResult("");
     setAttackerBeforeWar({});
     setDefenderBeforeWar({});
     setIsChooseWeapon(false);
     let type = "war";
-    socket.emit("move-soldier", { player, attackSoldier, cellToAttack, type });
+    console.log("ID FROM MOVE SOLDIER", gameId);
+    console.log("ID FROM MOVE SOLDIER", gameId);
+    console.log("ID FROM MOVE SOLDIER", gameId);
+    console.log("ID FROM MOVE SOLDIER", gameId);
+    socket.emit("move-soldier", {
+      player,
+      attackSoldier,
+      cellToAttack,
+      type,
+      gameId,
+    });
+
     console.log('"moveSoldier:" socket.emit move-soldier');
 
     if (attackSoldier.weapon !== cellToAttack.weapon) {
@@ -277,14 +351,30 @@ function App() {
     }
   };
 
-  const moveSoldierAfterDraw = (attackSoldier, cellToAttack, player) => {
+  const moveSoldierAfterDraw = (attackSoldier, cellToAttack, gameId) => {
     // console.log("attackerBeforeWar", attackerBeforeWar);
     // console.log("attackerBeforeWar", defenderBeforeWar);
     let type = "warDraw";
 
-    socket.emit("move-soldier", { player, attackSoldier, cellToAttack, type });
+    console.log("GAME-ID GAME-ID", typeof gameId);
+    console.log("GAME-ID GAME-ID", gameId);
+    console.log("GAME-ID GAME-ID", typeof gameId);
+
+    console.log("GAME-ID GAME-ID", gameId);
+    console.log("GAME-ID GAME-ID", gameId);
+    console.log("GAME-ID GAME-ID", gameId);
+    console.log("GAME-ID GAME-ID", gameId);
+    console.log("GAME-ID GAME-ID", gameId);
+    console.log("GAME-ID GAME-ID", gameId);
+    socket.emit("move-soldier", {
+      attackSoldier,
+      cellToAttack,
+      type,
+      gameId,
+    });
     setWarDraw(false);
     setWar(false);
+    // setWarDrawHelpForDesign(false);
     setWarResult("");
     setAttackerBeforeWar({});
     setDefenderBeforeWar({});
@@ -307,16 +397,9 @@ function App() {
   };
 
   const closeModal = () => {
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
-    console.log("HERE IN CLOSE MODAL");
     setWar(false);
+    // setWarDrawHelpForDesign(false);
+    setWarDrawHelpForDesign(false);
     setWarResult("");
     setAttackerBeforeWar("");
     setDefenderBeforeWar("");
@@ -377,7 +460,13 @@ function App() {
         <CreateNewGame createGame={createGame} setPage={setPage} />
       )}
       {page === PAGE_JOIN_GAME && (
-        <JoinGame games={games} joinGame={joinGame} setPage={setPage} />
+        <JoinGame
+          games={games}
+          joinGame={joinGame}
+          setPage={setPage}
+          gameIsFullMsg={gameIsFullMsg}
+          setGameIsFullMsg={setGameIsFullMsg}
+        />
       )}
       {page === PAGE_GAME && (
         <Game
@@ -400,6 +489,7 @@ function App() {
           war={war}
           warDraw={warDraw}
           warResult={warResult}
+          warDrawHelpForDesign={warDrawHelpForDesign}
           attackerBeforeWar={attackerBeforeWar}
           defenderBeforeWar={defenderBeforeWar}
           closeModal={closeModal}

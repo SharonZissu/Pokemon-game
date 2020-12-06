@@ -11,6 +11,7 @@ const Modal = ({
   closeLeaveModal,
   handleChangeName,
   nameIsEmpty,
+  gameIsFullMsg,
 }) => {
   return (
     <>
@@ -20,14 +21,30 @@ const Modal = ({
       />
       {type === "join" && (
         <JoinContainer show={show}>
-          <Input
-            type="text"
-            placeholder="Enter nickname..."
-            onChange={handleChangeName}
-            nameIsEmpty={nameIsEmpty}
-          />
-          {/* joinGame(game.id) */}
-          <Button onClick={joinGameHandler}>Let's Play!</Button>
+          <CloseIconContainer>
+            <CloseIcon
+              onClick={closeJoinModal}
+              style={{ height: "3rem", width: "3rem" }}
+            />
+          </CloseIconContainer>
+
+          {gameIsFullMsg ? (
+            <h1>
+              Game is full!
+              <br /> Someone enter the room before you!
+            </h1>
+          ) : (
+            <>
+              <Input
+                type="text"
+                placeholder="Enter nickname..."
+                onChange={handleChangeName}
+                nameIsEmpty={nameIsEmpty}
+              />
+              {/* joinGame(game.id) */}
+              <Button onClick={joinGameHandler}>Let's Play!</Button>
+            </>
+          )}
         </JoinContainer>
       )}
       {type === "leave" && (
@@ -63,6 +80,9 @@ const JoinContainer = styled.div`
   transform: ${({ show }) =>
     show ? "translate(-50%,-50%)" : "translate(30rem, -50%)"};
   transition: all 1s;
+  h1 {
+    text-align: center;
+  }
 `;
 
 const Input = styled.input`
