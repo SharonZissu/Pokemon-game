@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import Footer from "../Footer";
+import React, { useEffect, useState } from "react";
+
+//Components
+import Footer from "../components/Footer";
+import Modal from "../components/Modals/Modal";
+import VoulmeIcons from "../components/UI/VoulmeIcons";
+
+//styles
 import styled from "styled-components";
 import joinImg from "../images/joinGame-img.png";
-// import joinImg from "../images/background.png";
-
-import Modal from "../Modal";
-import VoulmeIcons from "../VoulmeIcons";
 
 const JoinGame = ({
   games,

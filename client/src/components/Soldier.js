@@ -4,6 +4,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+
 const Soldier = ({
   cellColor,
   playerColor,
@@ -414,7 +415,7 @@ const Soldier = ({
 
       {img && (
         <Img
-          src={require(`./images/${img}.png`).default}
+          src={require(`../images/${img}.png`).default}
           alt="cell logo"
           flag={flag}
           color={cellColor === playerColor || exposed}

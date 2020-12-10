@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import winnerBG from "./images/winner.png";
+import winnerBG from "../../images/winner.png";
 
 const WinnerModal = ({
   winner,
@@ -31,13 +31,19 @@ const WinnerModal = ({
             </WinnerName>
             <Pics>
               <PokemonPic
-                src={require(`./images/charmander-${winnerColor}.png`).default}
+                src={
+                  require(`../../images/charmander-${winnerColor}.png`).default
+                }
               />
               <PokemonPic
-                src={require(`./images/squirtle-${winnerColor}.png`).default}
+                src={
+                  require(`../../images/squirtle-${winnerColor}.png`).default
+                }
               />
               <PokemonPic
-                src={require(`./images/balbazor-${winnerColor}.png`).default}
+                src={
+                  require(`../../images/balbazor-${winnerColor}.png`).default
+                }
               />
             </Pics>
             <BackToLobbyBtn onClick={handleBackToLobby}>

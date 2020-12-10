@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import logo from "./logo.svg";
-// import "./App.css";
+import React, { useState, useEffect } from "react";
 import socket from "./socketConfig";
-import Lobby from "./Pages/Lobby";
-import CreateNewGame from "./Pages/CreateNewGame";
-import Game from "./Pages/Game";
-import styled from "styled-components";
-import { GlobalStyle } from "./styles/globalStyle";
-import JoinGame from "./Pages/JoinGame";
-import { AudioContext } from "./audio-context";
-import Modal from "./Modal";
-import Rules from "./Pages/Rules";
 import ReactGA from "react-ga";
 
-// import ReactAudioPlayer from "react-audio-player";
+//Pages
+import Lobby from "./Pages/Lobby";
+import CreateNewGame from "./Pages/CreateNewGame";
+import JoinGame from "./Pages/JoinGame";
+import Rules from "./Pages/Rules";
+import Game from "./Pages/Game";
+
+//Components
+import Modal from "./components/Modals/Modal";
+
+//styles
+import styled from "styled-components";
+import { GlobalStyle } from "./styles/globalStyle";
 
 const PAGE_GAME = "Game";
 const PAGE_LOBBY = "Lobby";
@@ -53,15 +54,6 @@ function App() {
   const [gameNameExistsMsg, setGameNameExistsMsg] = useState(false);
   const [playerNameExistsMsg, setPlayerNameExistsMsg] = useState(false);
 
-  const {
-    playSound,
-    playWarSound,
-    pauseBattleSound,
-    stopWarSound,
-    playBattleSound,
-  } = useContext(AudioContext);
-  const warModalTimeout = useRef();
-
   useEffect(() => {
     const trackingId = "UA-184859803-1"; // Replace with your Google Analytics tracking ID
     ReactGA.initialize(trackingId);
@@ -82,12 +74,6 @@ function App() {
       setGame(game);
     }
   }, [games, gameId]);
-
-  // useEffect(() => {
-  //   return () => {
-  //     clearTimeout(warModalTimeout);
-  //   };
-  // }, [war]);
 
   useEffect(() => {
     socket.on("disconnect", () => {
@@ -125,16 +111,6 @@ function App() {
       ) {
         setWar(true);
         setWarDraw(false);
-        // warModalTimeout.current = setTimeout(() => {
-        //   setWar(false);
-        //   stopWarSound();
-        //   playBattleSound();
-        //   // setWarResult("");
-        //   // setAttackerBeforeWar("");
-        //   // setDefenderBeforeWar("");
-        // }, 9000);
-        // pauseBattleSound();
-        // playWarSound();
 
         setWarResult(result);
         setAttackerBeforeWar(attacker);
@@ -154,7 +130,6 @@ function App() {
         setDirection("");
       } else if (result === "winner") {
         setWinner(attacker);
-        // setIsGameFinished(true);
 
         return;
       } else if (result === "trap") {
@@ -163,11 +138,7 @@ function App() {
         checkDirection(attacker.index, defender.index);
         setWarDraw(false);
         setWar(false);
-        // setWarDrawHelpForDesign(false);
       }
-
-      // setWarDetails({ result, attacker, defender });
-      // setShowModal(true);
     });
 
     socket.on("winner", (winner) => {
@@ -215,10 +186,6 @@ function App() {
       if (!msg) {
         setGameId(gameId);
       } else if (msg === "name") {
-        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
-        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
-        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
-        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
         setPlayerNameExistsMsg(true);
       } else {
         setGameIsFullMsg(true);
@@ -227,7 +194,6 @@ function App() {
   };
 
   const leaveGame = () => {
-    // setGame(PAGE_LOBBY);
     setPage(PAGE_LOBBY);
     setGame({});
     setGameId(null);
@@ -255,12 +221,10 @@ function App() {
         game.board[cellToAttack.index].color &&
       game.board[cellToAttack.index].color !== "grey"
     ) {
-      // playWarSound();
     } else {
       checkDirection(attackSoldier.index, cellToAttack.index);
     }
     setWar(false);
-    // setWarDrawHelpForDesign(false);
     setWarDraw(false);
     setWarResult("");
     setAttackerBeforeWar({});
@@ -292,7 +256,6 @@ function App() {
     });
     setWarDraw(false);
     setWar(false);
-    // setWarDrawHelpForDesign(false);
     setWarResult("");
     setAttackerBeforeWar({});
     setDefenderBeforeWar({});
@@ -301,7 +264,6 @@ function App() {
 
   const checkDirection = (attackerIndex, defenderIndex) => {
     setCellToMoveIndex(defenderIndex);
-    // setAttackerIndex(attackerIndex);
     if (attackerIndex + 7 === defenderIndex) {
       setDirection("down");
     } else if (attackerIndex + 1 === defenderIndex) {
@@ -315,7 +277,6 @@ function App() {
 
   const closeModal = () => {
     setWar(false);
-    // setWarDrawHelpForDesign(false);
     setWarDrawHelpForDesign(false);
     setWarResult("");
     setAttackerBeforeWar("");
@@ -336,26 +297,6 @@ function App() {
   };
   return (
     <Container>
-      {/* <input
-        id="myInput"
-        type="button"
-        className="btn btn-primary mr-2"
-        value="Play"
-        onClick={playSound}
-      ></input>
-      <input
-        type="button"
-        className="btn btn-warning mr-2"
-        value="Pause"
-        onClick={pauseSound}
-      ></input>
-      <input
-        type="button"
-        className="btn btn-danger mr-2"
-        value="Stop"
-        onClick={stopSound}
-      ></input> */}
-
       {page === PAGE_LOBBY && (
         <>
           <Modal

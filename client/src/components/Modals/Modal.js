@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Backdrop from "./Backdrop";
+import Backdrop from "../UI/Backdrop/Backdrop";
 import CloseIcon from "@material-ui/icons/Close";
 
 const Modal = ({

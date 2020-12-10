@@ -1,21 +1,15 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
-import styled from "styled-components";
-import createGameImg from "../images/createGameImg.jpg";
-import bgImg from "../images/lobby-bg.jpg";
-import l from "../images/pokemon-minimalism-squirtle-bulbasaur-wallpaper-preview.jpg";
-// import lobby from "../images/lobboy-img.png";
-import LinkedInIcon from "@material-ui/icons/LinkedIn";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import GitHubIcon from "@material-ui/icons/GitHub";
-import Footer from "./../Footer";
-import VoulmeIcons from "../VoulmeIcons";
+import React, { useEffect } from "react";
 import ReactGA from "react-ga";
-import { GoogleTracking } from "../googleAnalytics";
+import { GoogleTracking } from "../utills/googleAnalytics";
 
-// let count = 0;
+//Components
+import VoulmeIcons from "../components/UI/VoulmeIcons";
+
+//styles
+import styled from "styled-components";
+import bgImg from "../images/lobby-bg.jpg";
+
 const Lobby = ({ games, setPage, joinGame }) => {
-  // const [audioPlaying, setAudioPlaying] = useState(false);
-  // var audioTune = new Audio(sound);
   useEffect(() => {
     const trackingId = "UA-184859803-1"; // Replace with your Google Analytics tracking ID
     ReactGA.initialize(trackingId);

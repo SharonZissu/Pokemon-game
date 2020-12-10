@@ -1,19 +1,22 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
+
+//Components
+import Soldier from "../components/Soldier";
+import Spinner from "../components/UI/Spinner/Spinner";
+import Message from "../components/Message";
+import VoulmeIcons from "../components/UI/VoulmeIcons";
+import WarModal from "../components/Modals/WarModal";
+import WarDrawModal from "../components/Modals/WarDrawModal";
+import WinnerModal from "../components/Modals/WinnerModal";
+
+//context
+import { AudioContext } from "../context/audio-context";
+
+//styles
 import styled, { keyframes, css } from "styled-components";
-import socket from "../socketConfig";
-import Cell from "../Cell";
-import Soldier from "../Soldier";
-import Spinner from "../Spinner";
-import seaImg from "../images/sea.png";
-import Message from "../Message";
-import { AudioContext } from "../audio-context";
-import WarModal from "../WarModal";
-import WarDrawModal from "../WarDrawModal";
 import WaitingBg from "../images/waitinig-bg.png";
-import VoulmeIcons from "../VoulmeIcons";
-import GameSpinner from "../GameSpinner";
-import WinnerModal from "../WinnerModal";
-// import battleSound from "../sounds/battle-sound.mp3";
+import seaImg from "../images/sea.png";
+
 const Game = ({
   game,
   color,

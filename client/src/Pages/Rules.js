@@ -1,8 +1,11 @@
 import React from "react";
-import VoulmeIcons from "../VoulmeIcons";
-import rulesImg from "../images/rules.png";
-import Footer from "../Footer";
+//Components
+import Footer from "../components/Footer";
+import VoulmeIcons from "../components/UI/VoulmeIcons";
+
+//styles
 import styled from "styled-components";
+import rulesImg from "../images/rules.png";
 
 const Rules = ({ setPage }) => {
   return (

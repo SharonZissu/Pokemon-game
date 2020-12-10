@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
-import CloseIcon from "@material-ui/icons/Close";
-import Spinner from "./Spinner";
+import Spinner from "../UI/Spinner/Spinner";
+
 const WarDrawModal = ({
   show,
   warResult,
@@ -55,7 +55,7 @@ const WarDrawModal = ({
               type="attacker"
             >
               <Img
-                src={require(`./images/${attackerImg}.png`).default}
+                src={require(`../../images/${attackerImg}.png`).default}
                 alt="attacker"
               />
             </Attacker>
@@ -63,15 +63,21 @@ const WarDrawModal = ({
             <ChoiseList>
               <Choise
                 onClick={() => choose("rock")}
-                src={require(`./images/charmander-${playerColor}.png`).default}
+                src={
+                  require(`../../images/charmander-${playerColor}.png`).default
+                }
               />
               <Choise
                 onClick={() => choose("scissors")}
-                src={require(`./images/balbazor-${playerColor}.png`).default}
+                src={
+                  require(`../../images/balbazor-${playerColor}.png`).default
+                }
               />
               <Choise
                 onClick={() => choose("paper")}
-                src={require(`./images/squirtle-${playerColor}.png`).default}
+                src={
+                  require(`../../images/squirtle-${playerColor}.png`).default
+                }
               />
             </ChoiseList>
             <Defender
@@ -81,7 +87,7 @@ const WarDrawModal = ({
               type="defender"
             >
               <Img
-                src={require(`./images/${defenderImg}.png`).default}
+                src={require(`../../images/${defenderImg}.png`).default}
                 alt="defender"
               />
             </Defender>

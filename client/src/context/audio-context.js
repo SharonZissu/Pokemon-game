@@ -1,7 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
-import sound from "./sounds/sound2.mp3";
-import battleSound from "./sounds/battle-sound2.mp3";
-import warSound from "./sounds/war.mp3";
+
+//sounds
+import sound from "../sounds/sound2.mp3";
+import battleSound from "../sounds/battle-sound2.mp3";
+import warSound from "../sounds/war.mp3";
 
 const AudioContext = createContext();
 const { Provider } = AudioContext;

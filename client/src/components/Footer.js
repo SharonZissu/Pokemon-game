@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <PickachuImg
-        src={require("./images/pickachu-footer.png").default}
+        src={require("../images/pickachu-footer.png").default}
         alt="pickachu"
       />
       <About>

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+
+//Components
+import Footer from "../components/Footer";
+import VoulmeIcons from "../components/UI/VoulmeIcons";
+
+//styles
 import createGameImg from "../images/createGameImg.jpg";
-import Footer from "../Footer";
-import VoulmeIcons from "../VoulmeIcons";
 import styled from "styled-components";
 
 const CreateNewGame = ({

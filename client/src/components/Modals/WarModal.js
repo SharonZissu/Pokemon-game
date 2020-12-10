@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { keyframes, css } from "styled-components";
-import CloseIcon from "@material-ui/icons/Close";
+
 const WarModal = ({
   show,
   warResult,
@@ -47,7 +47,7 @@ const WarModal = ({
               type="attacker"
             >
               <Img
-                src={require(`./images/${attackerImg}.png`).default}
+                src={require(`../../images/${attackerImg}.png`).default}
                 alt="attacker"
               />
             </Attacker>
@@ -59,7 +59,7 @@ const WarModal = ({
               type="defender"
             >
               <Img
-                src={require(`./images/${defenderImg}.png`).default}
+                src={require(`../../images/${defenderImg}.png`).default}
                 alt="defender"
               />
             </Defender>

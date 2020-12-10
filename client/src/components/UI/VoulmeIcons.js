@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import VolumeOffIcon from "@material-ui/icons/VolumeOff";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
-import { AudioContext } from "./audio-context";
+import { AudioContext } from "../../context/audio-context";
 import styled, { css } from "styled-components";
 
 const VoulmeIcons = ({ type }) => {
