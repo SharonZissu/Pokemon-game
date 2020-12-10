@@ -12,6 +12,7 @@ const Modal = ({
   handleChangeName,
   nameIsEmpty,
   gameIsFullMsg,
+  playerNameExistsMsg,
 }) => {
   return (
     <>
@@ -35,6 +36,9 @@ const Modal = ({
             </h1>
           ) : (
             <>
+              {playerNameExistsMsg && (
+                <NicknameExists>Nickname is already exists!</NicknameExists>
+              )}
               <Input
                 type="text"
                 placeholder="Enter nickname..."
@@ -85,6 +89,11 @@ const JoinContainer = styled.div`
   }
 `;
 
+const NicknameExists = styled.h1`
+  color: red;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+`;
 const Input = styled.input`
   font-size: 2rem;
   padding: 1rem;

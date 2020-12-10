@@ -13,6 +13,8 @@ const JoinGame = ({
   setPage,
   gameIsFullMsg,
   setGameIsFullMsg,
+  playerNameExistsMsg,
+  setPlayerNameExistsMsg,
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [gameId, setGameId] = useState(false);
@@ -26,6 +28,7 @@ const JoinGame = ({
   }, [name]);
   const handleChangeName = (e) => {
     setName(e.target.value);
+    setPlayerNameExistsMsg(false);
   };
 
   const handleJoin = (gameId, numberOfPlayers) => {
@@ -59,6 +62,7 @@ const JoinGame = ({
           handleChangeName={handleChangeName}
           nameIsEmpty={nameIsEmpty}
           gameIsFullMsg={gameIsFullMsg}
+          playerNameExistsMsg={playerNameExistsMsg}
         />
         <Img src={joinImg} alt="join game img" />
         <TableContainer>

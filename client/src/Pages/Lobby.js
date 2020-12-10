@@ -9,12 +9,18 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import Footer from "./../Footer";
 import VoulmeIcons from "../VoulmeIcons";
+import ReactGA from "react-ga";
+import { GoogleTracking } from "../googleAnalytics";
 
 // let count = 0;
 const Lobby = ({ games, setPage, joinGame }) => {
   // const [audioPlaying, setAudioPlaying] = useState(false);
   // var audioTune = new Audio(sound);
-
+  useEffect(() => {
+    const trackingId = "UA-184859803-1"; // Replace with your Google Analytics tracking ID
+    ReactGA.initialize(trackingId);
+    ReactGA.pageview(window.location.pathname);
+  }, []);
   // useEffect(() => {
   //   audioTune.load();
   // }, []);
@@ -42,9 +48,12 @@ const Lobby = ({ games, setPage, joinGame }) => {
     switch (type) {
       case "create":
         setPage("CreateNewGame");
+        GoogleTracking("create-button", "create game", "create");
         break;
       case "join":
         setPage("JoinGame");
+        GoogleTracking("join-button", "join game", "join");
+
         break;
       case "rules":
         setPage("Rules");
@@ -54,6 +63,11 @@ const Lobby = ({ games, setPage, joinGame }) => {
   return (
     <Container>
       <VoulmeIcons />
+      {/* <Buttons>
+        <CreateBtn onClick={() => handleClick("create")}>Create</CreateBtn>
+        <JoinBtn onClick={() => handleClick("join")}>Join</JoinBtn>
+        <RulesBtn onClick={() => handleClick("rules")}>Rules</RulesBtn>
+      </Buttons> */}
       <CreateBtn onClick={() => handleClick("create")}>Create</CreateBtn>
       <JoinBtn onClick={() => handleClick("join")}>Join</JoinBtn>
       <RulesBtn onClick={() => handleClick("rules")}>Rules</RulesBtn>
@@ -126,6 +140,12 @@ const Buttons = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Cards = styled.div`
@@ -156,6 +176,43 @@ const CardImg = styled.img`
   height: 8rem;
   margin-bottom: -1rem;
 `;
+// const Button = styled.button`
+//   @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap");
+//   font-family: "Josefin Sans", sans-serif;
+//   padding: 1rem 4rem;
+//   font-size: 3rem;
+//   background-color: rgba(256, 256, 256, 0.6);
+//   /* position: absolute; */
+//   border: none;
+//   text-transform: uppercase;
+//   width: 20rem;
+//   height: 6rem;
+//   &:not(:last-child) {
+//     margin-bottom: 2rem;
+//   }
+// `;
+// const CreateBtn = styled(Button)`
+//   /* top: 14.8rem; */
+//   /* top: 21%;
+//   left: 0;
+
+//   transform: rotate(15deg) translateX(60%); */
+// `;
+
+// const JoinBtn = styled(Button)`
+//   /* top: 47.5rem; */
+//   /* top: 68%;
+
+//   left: 0;
+
+//   transform: rotate(-26deg) translateX(80%); */
+// `;
+
+// const RulesBtn = styled(Button)`
+//   bottom: 1rem;
+//   left: 1rem;
+// `;
+
 const Button = styled.button`
   @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap");
   font-family: "Josefin Sans", sans-serif;
@@ -176,17 +233,34 @@ const CreateBtn = styled(Button)`
 
 const JoinBtn = styled(Button)`
   /* top: 47.5rem; */
-  top: 68%;
+  top: 65vh;
+  @media (min-height: 812px) {
+    top: 68%;
+  }
 
   left: 0;
 
   transform: rotate(-26deg) translateX(80%);
+  /* @media (min-height: 811px) {
+    top: 66%;
+  }
+  @media (max-width: 376px) {
+    top: 64%;
+  } */
+
+  /* @media (min-height: 812px) {
+    top: 66%;
+  }
+  @media (min-height: 667px) {
+    top: 64%;
+  } */
 `;
 
 const RulesBtn = styled(Button)`
   bottom: 1rem;
   left: 1rem;
 `;
+
 // const Button = styled.button`
 //   @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap");
 //   font-family: "Josefin Sans", sans-serif;

@@ -44,8 +44,6 @@ const Game = ({
   winner,
   warDrawHelpForDesign,
 }) => {
-  // console.log(game);
-
   const [flag, setFlag] = useState(false);
   const [trap, setTrap] = useState(false);
   const [arrayOfArrows, setArrayOfArrows] = useState([]);
@@ -57,12 +55,9 @@ const Game = ({
     AudioContext
   );
 
-  console.log("War:", war);
-  console.log("WarDraw:", warDraw);
   useEffect(() => {
     // battleAudio.load();
     return () => {
-      // console.log("pauseeeee");
       // battleAudio.pause();
       // battleAudio.currentTime = 0;
       stopBattleSound();
@@ -287,7 +282,8 @@ const Game = ({
           !warDraw &&
           gameStartAfterFlagsAndTraps && (
             <>
-              <GameSpinner />
+              <Spinner size="small" />
+              {/* <GameSpinner /> */}
               <WaitingText2>Waiting for opponent</WaitingText2>
             </>
           )}
@@ -845,9 +841,10 @@ const GameSpinnerContainer = styled.div`
   /* margin-right: 20%; */
   display: flex;
   flex-direction: column;
-  margin-top: -13%;
+  /* margin-top: -13%; */
   margin-left: 2rem;
   position: relative;
+  align-items: center;
 `;
 
 const LeaveGameBtn = styled.button`

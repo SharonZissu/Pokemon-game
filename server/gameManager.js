@@ -108,9 +108,7 @@ exports.createGame = ({ player, gameName, playerName }) => {
 exports.endGame = ({ player, winner }) => {
   const game = getGameForPlayer(player);
   // players might disconnect while in the lobby
-  // console.log("PLAYERRR:", player);
   if (!game) return;
-  // console.log("BEFOREEE SPLICEEE");
   games.splice(games.indexOf(game), 1);
   game.players.forEach((currentPlayer) => {
     if (player !== currentPlayer.socket) {

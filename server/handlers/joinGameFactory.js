@@ -4,6 +4,11 @@ const sendGames = require("../helpers/sendGames");
 module.exports = ({ io, socket }) => ({ gameId, playerName }, cb) => {
   const game = getGameById(gameId);
   console.log("game", game);
+  const equalPlayerName = game.newPlayers.find((p) => p.name === playerName);
+  if (equalPlayerName) {
+    cb("name");
+    return;
+  }
   if (game.numberOfPlayers < 2) {
     console.log("numberOfPlayers < 2");
     // console.log("numberOfPlayers < 2");

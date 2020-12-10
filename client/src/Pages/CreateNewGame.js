@@ -4,7 +4,12 @@ import Footer from "../Footer";
 import VoulmeIcons from "../VoulmeIcons";
 import styled from "styled-components";
 
-const CreateNewGame = ({ createGame, setPage }) => {
+const CreateNewGame = ({
+  createGame,
+  setPage,
+  gameNameExistsMsg,
+  setGameNameExistsMsg,
+}) => {
   const [gameName, setGameName] = useState("");
   const [playerName, setPlayerName] = useState("");
   const [playerNameEmpty, setPlayerNameEmpty] = useState(false);
@@ -54,12 +59,19 @@ const CreateNewGame = ({ createGame, setPage }) => {
         <InputContainer>
           <Input
             type="text"
-            onChange={(e) => setGameName(e.target.value)}
+            onChange={(e) => {
+              setGameName(e.target.value);
+              setGameNameExistsMsg(false);
+            }}
             placeholder="Game name"
             gameNameEmpty={gameNameEmpty}
           />
-          <Label for="game-name" class="form__label">
-            Game name
+          <Label
+            for="game-name"
+            class="form__label"
+            gameNameExistsMsg={gameNameExistsMsg}
+          >
+            {!gameNameExistsMsg ? "Game name" : "Game Name is already exists!"}
           </Label>
         </InputContainer>
       </NewGame>
@@ -173,5 +185,5 @@ const Label = styled.label`
   margin-top: 0.7rem;
   display: block;
   transition: all 0.3s;
-  color: #999;
+  color: ${({ gameNameExistsMsg }) => (gameNameExistsMsg ? "red" : "#999")};
 `;

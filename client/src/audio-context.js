@@ -33,23 +33,19 @@ const AudioProvider = ({ children }) => {
 
   // pause audio sound
   const pauseSound = () => {
-    // console.log("pause");
     audioTune.pause();
   };
 
   const pauseBattleSound = () => {
-    // console.log("pause");
     battleAudio.pause();
   };
 
   const pauseWarSound = () => {
-    // console.log("pause");
     warAudio.pause();
   };
 
   // stop audio sound
   const stopSound = () => {
-    console.log("stoping sound");
     audioTune.pause();
     audioTune.currentTime = 0;
     // setAudioTuneState(false);

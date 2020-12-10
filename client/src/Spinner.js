@@ -1,9 +1,9 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-const Spinner = ({ size, color }) => {
+const Spinner = ({ size }) => {
   let styledSpinner = false;
-  if (size === "big" && color === "white") {
+  if (size === "small") {
     styledSpinner = true;
   }
   return <Loader styledSpinner={styledSpinner}></Loader>;
@@ -28,14 +28,18 @@ const Loader = styled.div`
   border-radius: 50%;
 
   text-indent: -9999em;
-  width: ${({ styledSpinner }) => (styledSpinner ? "10rem" : "10rem")};
-  height: ${({ styledSpinner }) => (styledSpinner ? "10rem" : "10rem")};
+  width: ${({ styledSpinner }) => (styledSpinner ? "4rem" : "10rem")};
+  height: ${({ styledSpinner }) => (styledSpinner ? "4rem" : "10rem")};
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
   -webkit-animation: ${load8} 1.1s infinite linear;
   animation: ${load8} 1.1s infinite linear;
-  border-top: ${({ styledSpinner }) =>
+  border-top: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-right: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-left: 1.1em solid #000000;
+  /* border-top: ${({ styledSpinner }) =>
     styledSpinner
       ? "1.1em solid rgba(255, 255, 255, 0.2)"
       : "1.1em solid rgba(0, 0, 0, 0.2)"};
@@ -48,11 +52,11 @@ const Loader = styled.div`
       ? "1.1em solid rgba(255, 255, 255, 0.2)"
       : "1.1em solid rgba(0, 0, 0, 0.2)"};
   border-left: ${({ styledSpinner }) =>
-    styledSpinner ? "1.1em solid #ffffff" : "1.1em solid #000000"};
+    styledSpinner ? "1.1em solid #ffffff" : "1.1em solid #000000"}; */
 
   &::after {
     border-radius: 50%;
-    width: ${({ styledSpinner }) => (styledSpinner ? "42rem" : "10rem")};
-    height: ${({ styledSpinner }) => (styledSpinner ? "42rem" : "10rem")};
+    width: ${({ styledSpinner }) => (styledSpinner ? "4rem" : "10rem")};
+    height: ${({ styledSpinner }) => (styledSpinner ? "4rem" : "10rem")};
   }
 `;

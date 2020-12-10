@@ -9,14 +9,6 @@ const WarModal = ({
   playerColor,
   closeModal,
 }) => {
-  if (show) {
-    console.log("show from WarModal", show);
-    console.log("warResult from WarModal", warResult);
-    console.log("attackerBeforeWar from WarModal", attackerBeforeWar);
-    console.log("defenderBeforeWar from WarModal", defenderBeforeWar);
-    console.log("playerColor from WarModal", playerColor);
-  }
-
   const checkImg = (weapon, color) => {
     switch (weapon) {
       case "rock":

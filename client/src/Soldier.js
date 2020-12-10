@@ -97,8 +97,6 @@ const Soldier = ({
     return true;
   };
 
-  // console.log("attackerBeforeWar", attackerBeforeWar);
-  // console.log("defenderBeforeWar", defenderBeforeWar);
   let img;
 
   const checkSoldier = () => {
@@ -249,14 +247,12 @@ const Soldier = ({
       //   (playerColor !== attackerBeforeWar.color)
       // ) {
       //   img = `pokeball-${attackerBeforeWar.color}`;
-      //   console.log("HERERERERERERER POKEBALL ATTACKER");
       // } else if (
       //   attackerBeforeWar.index === index &&
       //   playerColor === attackerBeforeWar.color
       // ) {
       //   if (attackerBeforeWar.weapon === "rock") {
       //     img = `charmander-${attackerBeforeWar.color}`;
-      //     console.log("CHARMANDERRRRRRRRRRRRRRRR ");
       //   }
 
       //   if (attackerBeforeWar === "paper")

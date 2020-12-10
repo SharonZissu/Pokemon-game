@@ -9,10 +9,12 @@ const Footer = () => {
         alt="pickachu"
       />
       <About>
-        <LinkTo href="#">Linkedin</LinkTo>
+        <LinkTo href="https://www.linkedin.com/in/sharon-zissu-9b9812187/">
+          Linkedin
+        </LinkTo>
 
-        <LinkTo href="#">Facebook</LinkTo>
-        <LinkTo href="#">Github</LinkTo>
+        <LinkTo href="https://www.facebook.com/sharon.zissu">Facebook</LinkTo>
+        <LinkTo href="https://github.com/SharonZissu">Github</LinkTo>
       </About>
     </FooterContainer>
   );

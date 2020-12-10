@@ -11,6 +11,8 @@ import JoinGame from "./Pages/JoinGame";
 import { AudioContext } from "./audio-context";
 import Modal from "./Modal";
 import Rules from "./Pages/Rules";
+import ReactGA from "react-ga";
+
 // import ReactAudioPlayer from "react-audio-player";
 
 const PAGE_GAME = "Game";
@@ -48,6 +50,8 @@ function App() {
   const [winner, setWinner] = useState({});
   const [isGameFinished, setIsGameFinished] = useState(false);
   const [gameIsFullMsg, setGameIsFullMsg] = useState(false);
+  const [gameNameExistsMsg, setGameNameExistsMsg] = useState(false);
+  const [playerNameExistsMsg, setPlayerNameExistsMsg] = useState(false);
 
   const {
     playSound,
@@ -57,29 +61,24 @@ function App() {
     playBattleSound,
   } = useContext(AudioContext);
   const warModalTimeout = useRef();
+
+  useEffect(() => {
+    const trackingId = "UA-184859803-1"; // Replace with your Google Analytics tracking ID
+    ReactGA.initialize(trackingId);
+    ReactGA.pageview(window.location.pathname);
+  }, []);
   useEffect(() => {
     // if (page !== "Lobby") playSound();
   }, [page]);
 
   useEffect(() => {
     const game = games.find((g) => g.id === gameId);
-    console.log("GAME");
-    console.log("GAME");
-    console.log("GAME");
-    console.log("GAME", game);
-    console.log("GAME");
-    console.log("GAME");
-    console.log("GAME");
 
     if (!game) {
-      // console.log("GAME NOT FOUND FROM USEEEFECT");
-
       setGame({
         board: [],
       });
     } else {
-      // console.log(game);
-      // console.log("GAME FROM USEEEFECT", game);
       setGame(game);
     }
   }, [games, gameId]);
@@ -92,14 +91,6 @@ function App() {
 
   useEffect(() => {
     socket.on("disconnect", () => {
-      console.log("IN DISCONNECT");
-      console.log("IN DISCONNECT");
-      console.log("IN DISCONNECT");
-      console.log("IN DISCONNECT");
-      console.log("IN DISCONNECT");
-      console.log("IN DISCONNECT");
-      console.log("IN DISCONNECT");
-      // console.log("socket.on(disconnect)");
       setGameId(null);
       setColor("");
       setPage(PAGE_LOBBY);
@@ -108,24 +99,15 @@ function App() {
     });
 
     socket.on("games", (games) => {
-      // console.log("socket.on(games)");
-
-      // console.log(games);
       setGames(games);
     });
 
     socket.on("your-game-created", (gameId) => {
-      // console.log("socket.on(your-game-created)");
-
-      // console.log(gameId);
-      console.log("Game Id", gameId);
       setGameId(gameId);
+      setPage(PAGE_GAME);
     });
 
     socket.on("color", (color) => {
-      // console.log("socket.on(color)");
-      // console.log(color);
-
       setColor(color);
       setPage(PAGE_GAME);
     });
@@ -135,20 +117,12 @@ function App() {
     });
 
     socket.on("move-soldier-result", ({ result, attacker, defender }) => {
-      // console.log("attacker from move-soldier", attacker);
-      // console.log("defender from move-soldier", defender);
-      // setAttackerIndex(attacker.index);
       if (
         result !== "empty" &&
         result !== "draw" &&
         result !== "trap" &&
         result !== "winner"
       ) {
-        // console.log("YESSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-        console.log(
-          '"move-soldier-result:" setWar to true and setWarDraw to false'
-        );
-
         setWar(true);
         setWarDraw(false);
         // warModalTimeout.current = setTimeout(() => {
@@ -167,17 +141,11 @@ function App() {
         setDefenderBeforeWar(defender);
         setDirection("");
       } else if (result === "draw") {
-        // console.log("inside IFFIFIFIFIFIF");
-        // console.log(result);
         setWarDraw(true);
         setTimeout(() => {
           setWarDrawHelpForDesign(true);
         }, 5000);
         setWar(false);
-
-        console.log(
-          '"move-soldier-result:" setWarDraw to true and setWar to false'
-        );
 
         setWarResult(result);
 
@@ -187,9 +155,7 @@ function App() {
       } else if (result === "winner") {
         setWinner(attacker);
         // setIsGameFinished(true);
-        console.log("settinggggggggggggggggggggggggggg flagalglgl");
-        console.log("ATTACKERRR", attacker);
-        console.log(game.players);
+
         return;
       } else if (result === "trap") {
         return;
@@ -205,14 +171,6 @@ function App() {
     });
 
     socket.on("winner", (winner) => {
-      console.log("WINNER");
-      console.log("WINNER");
-      console.log("WINNER");
-      console.log("WINNER");
-      console.log("WINNER");
-      console.log("WINNER");
-      console.log("WINNER");
-      console.log("WINNER");
       setWinner(winner);
     });
     socket.on("end-game", () => {
@@ -221,38 +179,18 @@ function App() {
       setPage(PAGE_LOBBY);
       openLeaveModal(true);
       setWinner({});
-      console.log("logging from end-game");
       // setShowModal(true);
       // setModalText('Your opponent has left the game');
       // setModalTitle('Game Over');
     });
 
     socket.on("choises-after-draw", ({ warArr, turn, gameId }) => {
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      console.log("WarArr:", warArr);
-      // console.log("Turn:", turn);
       const red = warArr.find((item) => item.color === "red");
       red.player.weapon = red.weapon;
       const blue = warArr.find((item) => item.color === "blue");
       blue.player.weapon = blue.weapon;
       setWarDraw(false);
-      // console.log("RED", red);
-      // console.log("BLUE", blue);
-      // console.log("GAMEEEEEEEEEEEEEE", game);
+
       if (turn === "red") {
         moveSoldierAfterDraw(blue.player, red.player, gameId);
       } else {
@@ -262,13 +200,13 @@ function App() {
   }, []);
 
   const createGame = (gameName, playerName) => {
-    socket.emit("create-game", { gameName, playerName });
-    setPage(PAGE_GAME);
+    socket.emit("create-game", { gameName, playerName }, (errorMsg) => {
+      setGameNameExistsMsg(true);
+    });
   };
 
   const joinGame = (gameId, playerName) => {
     const game = games.find((g) => g.id === gameId);
-    console.log("GAME", game);
     if (game.newPlayers.length > 2) {
       alert("Error");
       return;
@@ -276,6 +214,12 @@ function App() {
     socket.emit("join-game", { gameId, playerName }, (msg) => {
       if (!msg) {
         setGameId(gameId);
+      } else if (msg === "name") {
+        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
+        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
+        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
+        console.log("YESSSSSSSSSSSSSSSSSSSSSSSSS");
+        setPlayerNameExistsMsg(true);
       } else {
         setGameIsFullMsg(true);
       }
@@ -302,17 +246,10 @@ function App() {
   };
 
   const handleAttack = (soldier) => {
-    // console.log("HANDLE ATTACK");
-    // console.log(soldier);
-    console.log("SOLDIERRRRRRRRRRRRRRRRRRRRRRRRRRRRRR", soldier);
     setAttackSoldier(soldier);
   };
 
   const moveSoldier = (cellToAttack, player) => {
-    // console.log("INDEX1", game.board[attackSoldier/index].color);
-    // console.log("INDEX2", game.board[cellToAttack.index].color);
-    // console.log("ATTACK SOLDIER", attackSoldier);
-    // console.log("PLAYER", player);
     if (
       game.board[attackSoldier.index].color !==
         game.board[cellToAttack.index].color &&
@@ -322,7 +259,6 @@ function App() {
     } else {
       checkDirection(attackSoldier.index, cellToAttack.index);
     }
-    console.log('"moveSoldier:" setWar and setWarDraw to false');
     setWar(false);
     // setWarDrawHelpForDesign(false);
     setWarDraw(false);
@@ -331,10 +267,7 @@ function App() {
     setDefenderBeforeWar({});
     setIsChooseWeapon(false);
     let type = "war";
-    console.log("ID FROM MOVE SOLDIER", gameId);
-    console.log("ID FROM MOVE SOLDIER", gameId);
-    console.log("ID FROM MOVE SOLDIER", gameId);
-    console.log("ID FROM MOVE SOLDIER", gameId);
+
     socket.emit("move-soldier", {
       player,
       attackSoldier,
@@ -343,29 +276,14 @@ function App() {
       gameId,
     });
 
-    console.log('"moveSoldier:" socket.emit move-soldier');
-
     if (attackSoldier.weapon !== cellToAttack.weapon) {
-      // console.log("if(attackSoldier.weapon !== cellToAttack.weapon)");
       setAttackSoldier();
     }
   };
 
   const moveSoldierAfterDraw = (attackSoldier, cellToAttack, gameId) => {
-    // console.log("attackerBeforeWar", attackerBeforeWar);
-    // console.log("attackerBeforeWar", defenderBeforeWar);
     let type = "warDraw";
 
-    console.log("GAME-ID GAME-ID", typeof gameId);
-    console.log("GAME-ID GAME-ID", gameId);
-    console.log("GAME-ID GAME-ID", typeof gameId);
-
-    console.log("GAME-ID GAME-ID", gameId);
-    console.log("GAME-ID GAME-ID", gameId);
-    console.log("GAME-ID GAME-ID", gameId);
-    console.log("GAME-ID GAME-ID", gameId);
-    console.log("GAME-ID GAME-ID", gameId);
-    console.log("GAME-ID GAME-ID", gameId);
     socket.emit("move-soldier", {
       attackSoldier,
       cellToAttack,
@@ -382,7 +300,6 @@ function App() {
   };
 
   const checkDirection = (attackerIndex, defenderIndex) => {
-    // console.log(attackerIndex);
     setCellToMoveIndex(defenderIndex);
     // setAttackerIndex(attackerIndex);
     if (attackerIndex + 7 === defenderIndex) {
@@ -409,8 +326,6 @@ function App() {
   };
 
   const chooseWeaponDrawWar = (weapon, player) => {
-    // console.log(weapon);
-    // console.log(color);
     setIsChooseWeapon(true);
     socket.emit("choose-weapon", { weapon, color, player });
   };
@@ -457,7 +372,12 @@ function App() {
         </>
       )}
       {page === PAGE_CREATE_NEW_GAME && (
-        <CreateNewGame createGame={createGame} setPage={setPage} />
+        <CreateNewGame
+          createGame={createGame}
+          setPage={setPage}
+          gameNameExistsMsg={gameNameExistsMsg}
+          setGameNameExistsMsg={setGameNameExistsMsg}
+        />
       )}
       {page === PAGE_JOIN_GAME && (
         <JoinGame
@@ -466,6 +386,8 @@ function App() {
           setPage={setPage}
           gameIsFullMsg={gameIsFullMsg}
           setGameIsFullMsg={setGameIsFullMsg}
+          playerNameExistsMsg={playerNameExistsMsg}
+          setPlayerNameExistsMsg={setPlayerNameExistsMsg}
         />
       )}
       {page === PAGE_GAME && (

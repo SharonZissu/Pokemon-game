@@ -22,8 +22,7 @@ const WarDrawModal = ({
     }
     chooseWeapon(weapon, player);
   };
-  // console.log(attackerBeforeWar);
-  // console.log(defenderBeforeWar);
+
   const checkImg = (weapon, color) => {
     switch (weapon) {
       case "rock":
